@@ -53,6 +53,7 @@ graphe::graphe(std::string nomFichierSommets,std::string nomFichierPoids){
 void graphe::Kruskalcout1() const{
     std::vector<Arete*> graphe_kruskal;
     std::vector<double> sommets_marques;
+
     for (auto elem_arete_en_cours : m_aretes)
     {
         auto test1 = std::find(sommets_marques.begin(), sommets_marques.end(), elem_arete_en_cours->getS1());
@@ -72,6 +73,7 @@ void graphe::Kruskalcout1() const{
     {
         elemAreteKruskal->afficherIDArete();
     }
+    std::cout<<std::endl;
 
 }
 void graphe::Kruskalcout2() const{
@@ -96,6 +98,7 @@ void graphe::Kruskalcout2() const{
     {
         elemAreteKruskal->afficherIDArete();
     }
+    std::cout<<std::endl;
 }
 
 void graphe::afficher() const{
