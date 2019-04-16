@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include "sommet.h"
 #include "arete.h"
+#include"svgfile.h"
+#include "algorithm"
 
 class graphe
 {
@@ -14,24 +16,17 @@ class graphe
         graphe(std::string,std::string);
         ~graphe();
         void afficher() const;
-        ///lance un parcours en largeur à partir du sommet d'identifiant id
-        void parcoursBFS(std::string) const;
-        ///lance et affiche le parcours en largeur à partir du sommet d'identifiant id
-        void afficherBFS(std::string) const;
-         ///lance un parcours en profondeur à partir du sommet d'identifiant id
-        void parcoursDFS(std::string) const;
-        ///lance et affiche le parcours en profondeur à partir du sommet d'identifiant id
-        void afficherDFS(std::string) const;
-        ///recherche et affiche les composantes connexes
-        ///retourne le nombre de composantes connexes
-        int rechercher_afficherToutesCC() const;
+        void afficherGrapheTrieCroissant() const;
+        std::vector<Arete*> trieCroissantCout1() ;
+        std::vector<Arete*> trieCroissantCout2() ;
+        void Kruskal () const;
 
     protected:
 
     private:
         /// Le réseau est constitué d'une collection de sommets
-        std::unordered_map<std::string,Sommet*> m_sommets;//stockée dans une map (clé=id du sommet, valeur= pointeur sur le sommet)
-        std::unordered_map<std::string,Arete*> m_aretes;
+        std::vector<Sommet*> m_sommets;//stockée dans un vecteur (pointeur sur le sommet)
+        std::vector<Arete*> m_aretes;//stockée dans un vecteur (pointeur sur l'arête)
 };
 
 #endif // GRAPHE_H

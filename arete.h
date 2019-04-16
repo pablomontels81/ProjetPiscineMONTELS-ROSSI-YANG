@@ -5,15 +5,22 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
+#include"svgfile.h"
+#include"util.h"
+#include "sommet.h"
 
 
 class Arete
 {
     public:
         ///constructeur qui reçoit en params les données du sommet
-        Arete(std::string,float,float,double,double);
+        Arete(std::string,float,float,std::string,std::string);
         //void ajouterArete(const Arete*);
         void afficherDataArete() const;
+        float getCout1() const;
+        float getCout2() const;
+        void dessinerArete(Svgfile &fichier, std::vector<Sommet*> m_sommets);
+
         /*
         void afficherVoisinsPondere() const;
         ///méthode de parcours en largeur du graphe à partir du sommet
@@ -34,7 +41,7 @@ class Arete
         /// Données spécifiques du sommet
         std::string m_id; // Identifiant
         float m_cout1, m_cout2; // Poids de l'arête
-        double m_sommetdepart, m_sommetarrive; //Sommet départ et arrivée
+        std::string m_sommetdepart, m_sommetarrive; //Sommet départ et arrivée
 
 };
 
