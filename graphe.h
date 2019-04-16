@@ -14,10 +14,15 @@ class graphe
         graphe(std::string,std::string);
         ~graphe();
         void afficher() const;
-        void afficherGrapheTrieCroissant() const;
-        std::vector<Arete*> trieCroissantCout1 () ;
-        std::vector<Arete*> trieCroissantCout2() ;
-        void Kruskal () const;
+        void afficher_Kruskal() const;
+        void Kruskalcout1() const;
+        void Kruskalcout2() const;
+        std::vector<Arete*> triCout1();
+        std::vector<Arete*> triCout2();
+        void afficherGrapheTrieCroissantCout1() const;
+        void afficherGrapheTrieCroissantCout2() const;
+        //std::vector<Arete*> Kruskal() const;
+
 
     protected:
 

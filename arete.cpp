@@ -15,6 +15,10 @@ void Arete::afficherDataArete() const
     std::cout<<"       "<<"poids 1 : "<<m_cout1<<",  poids 2 : "<<m_cout2<<std::endl;
 }
 
+void Arete::afficherIDArete() const
+{
+    std::cout<<"    "<<m_id<<std::endl;
+}
 Arete::~Arete()
 {
     //dtor
@@ -22,10 +26,18 @@ Arete::~Arete()
 
 float Arete::getCout1() const
 {
-            return m_cout1;
+    return m_cout1;
 }
 
 float Arete::getCout2() const
 {
-            return m_cout2;
+    return m_cout2;
+}
+double Arete::getS1() const
+{
+    return m_sommetdepart;
+}
+double Arete::getS2() const
+{
+    return m_sommetarrive;
 }

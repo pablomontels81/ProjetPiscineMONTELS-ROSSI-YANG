@@ -49,6 +49,55 @@ graphe::graphe(std::string nomFichierSommets,std::string nomFichierPoids){
     }
 
 }
+
+void graphe::Kruskalcout1() const{
+    std::vector<Arete*> graphe_kruskal;
+    std::vector<double> sommets_marques;
+    for (auto elem_arete_en_cours : m_aretes)
+    {
+        auto test1 = std::find(sommets_marques.begin(), sommets_marques.end(), elem_arete_en_cours->getS1());
+        auto test2 = std::find(sommets_marques.begin(), sommets_marques.end(), elem_arete_en_cours->getS2());
+        if ((test1 == sommets_marques.end())&&(test2 == sommets_marques.end())||
+            (test1 != sommets_marques.end())&&(test2 == sommets_marques.end())||
+            (test1 == sommets_marques.end())&&(test2 != sommets_marques.end())
+            )
+        {
+            sommets_marques.push_back(elem_arete_en_cours->getS1());
+            sommets_marques.push_back(elem_arete_en_cours->getS2());
+            graphe_kruskal.push_back(elem_arete_en_cours);
+        }
+    }
+    std::cout<<"Resultat Kruskal : Arbre couvrant de Poids Minimum: "<<std::endl;
+    for (auto elemAreteKruskal : graphe_kruskal)
+    {
+        elemAreteKruskal->afficherIDArete();
+    }
+
+}
+void graphe::Kruskalcout2() const{
+    std::vector<Arete*> graphe_kruskal;
+    std::vector<double> sommets_marques;
+    for (auto elem_arete_en_cours : m_aretes)
+    {
+        auto test1 = std::find(sommets_marques.begin(), sommets_marques.end(), elem_arete_en_cours->getS1());
+        auto test2 = std::find(sommets_marques.begin(), sommets_marques.end(), elem_arete_en_cours->getS2());
+        if ((test1 == sommets_marques.end())&&(test2 == sommets_marques.end())||
+            (test1 != sommets_marques.end())&&(test2 == sommets_marques.end())||
+            (test1 == sommets_marques.end())&&(test2 != sommets_marques.end())
+            )
+        {
+            sommets_marques.push_back(elem_arete_en_cours->getS1());
+            sommets_marques.push_back(elem_arete_en_cours->getS2());
+            graphe_kruskal.push_back(elem_arete_en_cours);
+        }
+    }
+    std::cout<<"Resultat Kruskal : Arbre couvrant de Poids Minimum: "<<std::endl;
+    for (auto elemAreteKruskal : graphe_kruskal)
+    {
+        elemAreteKruskal->afficherIDArete();
+    }
+}
+
 void graphe::afficher() const{
     std::cout<<"graphe : "<<std::endl;
     std::cout<<" ordre : "<<m_sommets.size()<<std::endl;
@@ -64,25 +113,24 @@ void graphe::afficher() const{
         elemArete->afficherDataArete();
     }
 }
-/*
-void graphe::afficherGrapheTrieCroissant() const{
-    std::cout<<"
-}*/
 
-std::vector<Arete*> graphe::trieCroissantCout1()
+std::vector<Arete*> graphe::triCout1()
 {
     std::sort(m_aretes.begin(),m_aretes.end(),[](Arete* a1, Arete* a2)
     {
         return a1->getCout1() < a2->getCout1() ;
     });
 }
-std::vector<Arete*> graphe::trieCroissantCout2()
+std::vector<Arete*> graphe::triCout2()
 {
     std::sort(m_aretes.begin(),m_aretes.end(),[](Arete* a1, Arete* a2)
     {
         return a1->getCout2() < a2->getCout2() ;
     });
 }
+
+
+
 
 graphe::~graphe()
 {

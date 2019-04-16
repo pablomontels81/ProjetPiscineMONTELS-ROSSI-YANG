@@ -14,8 +14,11 @@ class Arete
         Arete(std::string,float,float,double,double);
         //void ajouterArete(const Arete*);
         void afficherDataArete() const;
+        void afficherIDArete() const;
         float getCout1() const;
         float getCout2() const;
+        double getS1() const;
+        double getS2() const;
 
         /*
         void afficherVoisinsPondere() const;
