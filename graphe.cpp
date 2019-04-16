@@ -24,7 +24,7 @@ graphe::graphe(std::string nomFichierSommets,std::string nomFichierPoids){
         ifsSommet>>id; if(ifsSommet.fail()) throw std::runtime_error("Probleme lecture données sommet");
         ifsSommet>>x; if(ifsSommet.fail()) throw std::runtime_error("Probleme lecture données sommet");
         ifsSommet>>y; if(ifsSommet.fail()) throw std::runtime_error("Probleme lecture données sommet");
-        m_sommets.insert({id,new Sommet{id,x,y}});
+        m_sommets.push_back(new Sommet{id,x,y});
     }
 
     int taille1,taille2, nbre;
@@ -45,7 +45,7 @@ graphe::graphe(std::string nomFichierSommets,std::string nomFichierPoids){
         ifsPoids>>Tampon; if(ifsSommet.fail()) throw std::runtime_error("Probleme lecture données sommet");
         ifsPoids>>cout1; if(ifsSommet.fail()) throw std::runtime_error("Probleme lecture données sommet");
         ifsPoids>>cout2; if(ifsSommet.fail()) throw std::runtime_error("Probleme lecture données sommet");
-        m_aretes.insert({id,new Arete{id,cout1,cout2,sommet1,sommet2}});
+        m_aretes.push_back(new Arete{id,cout1,cout2,sommet1,sommet2});
     }
 
 }
@@ -55,19 +55,29 @@ void graphe::afficher() const{
     for (auto elemSommet : m_sommets)
     {
         std::cout<<" sommet : "<<std::endl;
-        elemSommet.second->afficherData();
+        elemSommet->afficherData();
     }
     std::cout<<" taille "<<m_aretes.size()<<std::endl;
     for (auto elemArete : m_aretes)
     {
         std::cout<<" arete : "<<std::endl;
-        elemArete.second->afficherDataArete();
+        elemArete->afficherDataArete();
     }
 }
 
-std::unordered_map<std::string,float> graphe::trieCroissant()
+std::vector<Arete*> graphe::trieCroissantCout1()
 {
-    std::sort(m_aretes.begin(),m_aretes.end(),fonction_comparaison_cout1())
+    std::sort(m_aretes.begin(),m_aretes.end(),[](Arete* a1, Arete* a2)
+    {
+        return a1->getCout1() < a2->getCout1() ;
+    });
+}
+std::vector<Arete*> graphe::trieCroissantCout2()
+{
+    std::sort(m_aretes.begin(),m_aretes.end(),[](Arete* a1, Arete* a2)
+    {
+        return a1->getCout2() < a2->getCout2() ;
+    });
 }
 
 graphe::~graphe()
@@ -75,7 +85,3 @@ graphe::~graphe()
     //dtor
 }
 
-bool fonction_comparaison_cout1(std::pair<int,Arete> n1, std::pair<int,Arete> n2)
-{
-    return n1.second.m_cout1 < n2.second.m_cout1;
-}

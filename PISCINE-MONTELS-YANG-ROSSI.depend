@@ -52,7 +52,7 @@
 	<unordered_map>
 	"arete.h"
 
-1555341838 source:c:\users\pablo\projetpiscinemontels-rossi-yang\arete.cpp
+1555406951 source:c:\users\pablo\projetpiscinemontels-rossi-yang\arete.cpp
 	<iostream>
 	<queue>
 	<stack>
@@ -60,18 +60,19 @@
 	<unordered_set>
 	"arete.h"
 
-1555346404 c:\users\pablo\projetpiscinemontels-rossi-yang\arete.h
+1555407135 c:\users\pablo\projetpiscinemontels-rossi-yang\arete.h
 	<string>
 	<vector>
 	<unordered_map>
 	<unordered_set>
 
-1555344117 source:c:\users\pablo\projetpiscinemontels-rossi-yang\graphe.cpp
+1555405152 source:c:\users\pablo\projetpiscinemontels-rossi-yang\graphe.cpp
 	<fstream>
 	<iostream>
 	"graphe.h"
+	"algorithm"
 
-1555347713 c:\users\pablo\projetpiscinemontels-rossi-yang\graphe.h
+1555408023 c:\users\pablo\projetpiscinemontels-rossi-yang\graphe.h
 	<string>
 	<unordered_map>
 	"sommet.h"

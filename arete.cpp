@@ -19,3 +19,13 @@ Arete::~Arete()
 {
     //dtor
 }
+
+float Arete::getCout1() const
+{
+            return m_cout1;
+}
+
+float Arete::getCout2() const
+{
+            return m_cout2;
+}

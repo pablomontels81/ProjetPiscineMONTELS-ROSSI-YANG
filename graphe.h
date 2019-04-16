@@ -14,15 +14,16 @@ class graphe
         graphe(std::string,std::string);
         ~graphe();
         void afficher() const;
-        std::unordered_map<std::string,float> trieCroissant () ;
+        std::vector<Arete*> trieCroissantCout1 () ;
+        std::vector<Arete*> trieCroissantCout2() ;
         void Kruskal () const;
 
     protected:
 
     private:
         /// Le réseau est constitué d'une collection de sommets
-        std::unordered_map<std::string,Sommet*> m_sommets;//stockée dans une map (clé=id du sommet, valeur= pointeur sur le sommet)
-        std::unordered_map<std::string,Arete*> m_aretes;
+        std::vector<Sommet*> m_sommets;//stockée dans un vecteur (pointeur sur le sommet)
+        std::vector<Arete*> m_aretes;//stockée dans un vecteur (pointeur sur l'arête)
 };
 
 #endif // GRAPHE_H
