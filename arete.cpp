@@ -11,8 +11,8 @@ Arete::Arete(std::string id,float cout1,float cout2,double S1,double S2):m_id{id
 
 void Arete::afficherDataArete() const
 {
-    std::cout<<m_id<<"  "<<m_sommetdepart<<"  "<<m_sommetarrive<<std::endl;
-    std::cout<<m_cout1<<"  "<<m_cout2<<std::endl;
+    std::cout<<"    "<<m_id<<" : "<<"("<<m_sommetdepart<<","<<m_sommetarrive<<")"<<std::endl;
+    std::cout<<"       "<<"poids 1 : "<<m_cout1<<",  poids 2 : "<<m_cout2<<std::endl;
 }
 
 Arete::~Arete()

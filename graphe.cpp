@@ -51,19 +51,23 @@ graphe::graphe(std::string nomFichierSommets,std::string nomFichierPoids){
 }
 void graphe::afficher() const{
     std::cout<<"graphe : "<<std::endl;
-    std::cout<<" ordre "<<m_sommets.size()<<std::endl;
+    std::cout<<" ordre : "<<m_sommets.size()<<std::endl;
+    std::cout<<"  sommet : "<<std::endl;
     for (auto elemSommet : m_sommets)
     {
-        std::cout<<" sommet : "<<std::endl;
         elemSommet->afficherData();
     }
-    std::cout<<" taille "<<m_aretes.size()<<std::endl;
+    std::cout<<" taille : "<<m_aretes.size()<<std::endl;
+    std::cout<<" arete : "<<std::endl;
     for (auto elemArete : m_aretes)
     {
-        std::cout<<" arete : "<<std::endl;
         elemArete->afficherDataArete();
     }
 }
+/*
+void graphe::afficherGrapheTrieCroissant() const{
+    std::cout<<"
+}*/
 
 std::vector<Arete*> graphe::trieCroissantCout1()
 {
