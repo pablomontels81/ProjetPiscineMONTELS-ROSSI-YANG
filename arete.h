@@ -14,6 +14,7 @@ class Arete
         Arete(std::string,float,float,double,double);
         //void ajouterArete(const Arete*);
         void afficherDataArete() const;
+
         /*
         void afficherVoisinsPondere() const;
         ///méthode de parcours en largeur du graphe à partir du sommet

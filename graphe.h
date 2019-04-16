@@ -14,17 +14,8 @@ class graphe
         graphe(std::string,std::string);
         ~graphe();
         void afficher() const;
-        ///lance un parcours en largeur à partir du sommet d'identifiant id
-        void parcoursBFS(std::string) const;
-        ///lance et affiche le parcours en largeur à partir du sommet d'identifiant id
-        void afficherBFS(std::string) const;
-         ///lance un parcours en profondeur à partir du sommet d'identifiant id
-        void parcoursDFS(std::string) const;
-        ///lance et affiche le parcours en profondeur à partir du sommet d'identifiant id
-        void afficherDFS(std::string) const;
-        ///recherche et affiche les composantes connexes
-        ///retourne le nombre de composantes connexes
-        int rechercher_afficherToutesCC() const;
+        std::unordered_map<std::string,float> trieCroissant () ;
+        void Kruskal () const;
 
     protected:
 

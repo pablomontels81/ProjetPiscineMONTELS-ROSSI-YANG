@@ -21,21 +21,6 @@ void Sommet::afficherVoisins() const{
     }
 }
 
-std::unordered_map<std::string,std::string> Sommet::parcoursBFS() const{
-    std::unordered_map<std::string,std::string> l_pred;
-    std::cout<<"BFS a completer"<<std::endl;
-    return l_pred;
-}
-std::unordered_map<std::string,std::string> Sommet::parcoursDFS() const{
-    std::unordered_map<std::string,std::string> l_pred;
-    std::cout<<"DFS a completer"<<std::endl;
-    return l_pred;
-}
-std::unordered_set<std::string> Sommet::rechercherCC() const{
-    std::unordered_set<std::string> cc;
-    std::cout<<"rechercherCC a coder"<<std::endl;
-    return cc;
-}
 Sommet::~Sommet()
 {
     //dtor
