@@ -14,6 +14,7 @@ class graphe
         graphe(std::string,std::string);
         ~graphe();
         void afficher() const;
+        void EnumerationBinaire() const;
         void afficher_Kruskal() const;
         void Kruskalcout1() const;
         void Kruskalcout2() const;
@@ -22,6 +23,7 @@ class graphe
         void afficherGrapheTrieCroissantCout1() const;
         void afficherGrapheTrieCroissantCout2() const;
         //std::vector<Arete*> Kruskal() const;
+        void Prim() const;
 
 
     protected:
