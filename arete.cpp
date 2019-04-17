@@ -15,32 +15,38 @@ void Arete::afficherDataArete() const
     std::cout<<"       "<<"poids 1 : "<<m_cout1<<",  poids 2 : "<<m_cout2<<std::endl;
 }
 
-void Arete::dessinerArete(Svgfile &fichier, std::vector<Sommet*> m_sommets)
+void Arete::dessinerChemin(Svgfile &fichier, std::vector<Sommet*> m_sommets)
 {
     //sommet depart et sommet arrive
    double x_sd, y_sd, x_sa, y_sa, total_x, total_y;
-   for (int i = 0; i<m_sommets.size();++i) // parcour le vecteur sommets
+   for (size_t i = 0; i<m_sommets.size();++i) // parcour le vecteur sommets
    {
        if (m_sommets[i]->getId()==m_sommetdepart) // condition correpdanec des id
        {
            x_sd = m_sommets[i]->getX();
            y_sd = m_sommets[i]->getY();
-
        }
        if (m_sommets[i]->getId()==m_sommetarrive) // Pareil
        {
            x_sa = m_sommets[i]->getX();
            y_sa = m_sommets[i]->getY();
-
        }
    }
     total_x = x_sd+x_sa;
     total_y = y_sd+y_sa;
-    fichier.addLine(x_sd, y_sd, x_sa, y_sa, "black");
+
+    fichier.addLine(x_sd, y_sd, x_sa, y_sa, "red");
     fichier.addText((total_x/2), (total_y/2), m_id, "green");
 
 }
 
+
+
+void Arete::afficherIDArete() const{
+
+
+    std::cout<<"   "<<m_id<<std::endl;
+}
 
 Arete::~Arete()
 {
@@ -55,4 +61,22 @@ float Arete::getCout1() const
 float Arete::getCout2() const
 {
             return m_cout2;
+}
+std::string Arete::getS1()
+{
+    return m_sommetdepart;
+}
+std::string Arete::getS2() const
+{
+    return m_sommetarrive;
+}
+
+void Arete::setMarq(bool marq)
+{
+    m_marq=marq;
+}
+
+bool Arete::getMarq()
+{
+    return m_marq;
 }

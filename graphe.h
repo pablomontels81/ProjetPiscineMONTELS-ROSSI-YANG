@@ -5,8 +5,6 @@
 #include <unordered_map>
 #include "sommet.h"
 #include "arete.h"
-#include"svgfile.h"
-#include "algorithm"
 
 class graphe
 {
@@ -16,10 +14,13 @@ class graphe
         graphe(std::string,std::string);
         ~graphe();
         void afficher() const;
-        void afficherGrapheTrieCroissant() const;
-        std::vector<Arete*> trieCroissantCout1() ;
-        std::vector<Arete*> trieCroissantCout2() ;
-        void Kruskal () const;
+        void Primcout1();
+        std::vector<Arete*> triCout1();
+        std::vector<Arete*> triCout2();
+        int eulerien(std::set<Sommet*> vec);
+        void EnumerationBinaire() const;
+        //void Kruskal();
+
 
     protected:
 

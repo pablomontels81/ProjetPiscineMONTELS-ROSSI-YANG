@@ -9,12 +9,25 @@
 Sommet::Sommet(std::string id,double x,double y):m_id{id},m_x{x},m_y{y}
 {
 }
-void Sommet::ajouterVoisin(const Sommet* voisin){
+
+void Sommet::ajouterVoisin(std::string voisin)
+{
     m_voisins.push_back(voisin);
 }
-void Sommet::afficherData() const{
+
+void Sommet::afficherVoisins()
+{
+    for(auto v:m_voisins)
+    {
+        std::cout << v << std::endl;
+    }
+}
+
+void Sommet::afficherData() const
+{
      std::cout<<"    "<<m_id<<" : "<<"(x,y)=("<<m_x<<","<<m_y<<")"<<std::endl;
- }
+}
+
 void Sommet::dessinerSommet(Svgfile &fichier)
 {
     fichier.addDisk(m_x, m_y,5, "black");
@@ -34,6 +47,31 @@ double Sommet::getY()
 std::string Sommet::getId()
 {
      return m_id;
+}
+
+int Sommet::Paire()
+{
+    int nbr;
+
+    if(m_voisins.size() %2 == 0) //si paire
+    {
+        nbr = 1;
+    }
+    else // sinon impaire
+    {
+        nbr = 0;
+    }
+    return nbr;
+}
+
+bool Sommet::getMarq()
+{
+    return m_marq;
+}
+
+void Sommet::setMarq(bool marq)
+{
+   m_marq = marq;
 }
 
 Sommet::~Sommet()

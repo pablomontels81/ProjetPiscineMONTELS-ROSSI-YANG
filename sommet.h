@@ -8,14 +8,15 @@
 #include"svgfile.h"
 #include"util.h"
 
+
 class Sommet
 {
     public:
         ///constructeur qui reçoit en params les données du sommet
         Sommet(std::string,double,double);
-        void ajouterVoisin(const Sommet*);
+        void ajouterVoisin(std::string);
         void afficherData() const;
-        void afficherVoisins() const;
+        void afficherVoisins();
         void dessinerSommet(Svgfile &fichier);
         ///méthode de parcours en largeur du graphe à partir du sommet
         ///renvoie les prédécesseurs sous forme d'une map (clé=id du sommet,valeur=id de son prédécesseur)
@@ -28,17 +29,21 @@ class Sommet
         double getX();
         double getY();
         std::string getId();
+        int Paire();
+        bool getMarq();
+        void setMarq(bool marq);
         ~Sommet();
 
     protected:
 
     private:
         /// Voisinage : liste d'adjacence
-        std::vector<const Sommet*> m_voisins;
+        std::vector<std::string> m_voisins;
 
         /// Données spécifiques du sommet
         std::string m_id; // Identifiant
         double m_x, m_y; // Position
+        bool m_marq = false;
 
 };
 
