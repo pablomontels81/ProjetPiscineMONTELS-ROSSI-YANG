@@ -14,7 +14,8 @@ class graphe
         graphe(std::string,std::string);
         ~graphe();
         void afficher() const;
-        void Primcout1();
+        void dessiner(Svgfile &svgout) const;
+        void Primcout1(Svgfile &svgout);
         std::vector<Arete*> triCout1();
         std::vector<Arete*> triCout2();
         int eulerien(std::set<Sommet*> vec);

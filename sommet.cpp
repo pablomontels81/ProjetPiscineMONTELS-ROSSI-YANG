@@ -28,11 +28,18 @@ void Sommet::afficherData() const
      std::cout<<"    "<<m_id<<" : "<<"(x,y)=("<<m_x<<","<<m_y<<")"<<std::endl;
 }
 
+void Sommet::dessinerSommetC(Svgfile &fichier)
+{
+    fichier.addDisk(m_x+800, m_y,5, "black");
+    fichier.addText(m_x+810, m_y-10, m_id, "violet");
+}
+
 void Sommet::dessinerSommet(Svgfile &fichier)
 {
-    fichier.addDisk(m_x, m_y,5, "black");
-    fichier.addText(m_x+10, m_y-10, m_id, "violet");
+    fichier.addDisk(m_x+100, m_y,5, "red");
+    fichier.addText(m_x+110, m_y-10, m_id, "violet");
 }
+
 
 double Sommet::getX()
 {

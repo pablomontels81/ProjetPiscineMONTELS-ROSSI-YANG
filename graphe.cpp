@@ -88,10 +88,9 @@ graphe::graphe(std::string nomFichierSommets,std::string nomFichierPoids)
 
 }
 
-void graphe::Primcout1()
+void graphe::Primcout1(Svgfile &svgout)
 {
-    Svgfile svgout;
-    svgout.addGrid();
+    //svgout.addGrid();
     std::vector<Arete*> graphe_prim;
     std::set<std::string> sommets_marques;
 
@@ -167,15 +166,12 @@ void graphe::Primcout1()
     }
     for (auto elemAretePrim : m_sommets)
     {
-        elemAretePrim->dessinerSommet(svgout);
+        elemAretePrim->dessinerSommetC(svgout);
     }
 }
 
 void graphe::afficher() const
 {
-
-    Svgfile svgout;
-
     std::cout<<"graphe : "<<std::endl;
     std::cout<<" ordre : "<<m_sommets.size()<<std::endl;
     std::cout<<"  sommet : "<<std::endl;
@@ -183,11 +179,25 @@ void graphe::afficher() const
     {
         elemSommet->afficherData();
     }
+
     std::cout<<" taille : "<<m_aretes.size()<<std::endl;
     std::cout<<" arete : "<<std::endl;
     for (auto elemArete : m_aretes)
     {
         elemArete->afficherDataArete();
+    }
+
+}
+
+void graphe::dessiner(Svgfile &svgout) const
+{
+    for (auto elemSommet : m_sommets)
+    {
+        elemSommet->dessinerSommet(svgout);
+    }
+    for (auto elemArete : m_aretes)
+    {
+        elemArete->dessinerGraphe(svgout,m_sommets);
     }
 }
 

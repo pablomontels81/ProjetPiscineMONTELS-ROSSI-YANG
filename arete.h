@@ -22,7 +22,7 @@ class Arete
         float getCout2() const;
         std::string getS1();
         std::string getS2() const;
-        void dessinerArete(Svgfile &fichier, std::vector<Sommet*> m_sommets);
+        void dessinerGraphe(Svgfile &fichier, std::vector<Sommet*> m_sommets);
         void dessinerChemin(Svgfile &fichier, std::vector<Sommet*> m_sommets);
         void setMarq(bool marq);
         bool getMarq();
