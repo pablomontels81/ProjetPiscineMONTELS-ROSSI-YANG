@@ -5,14 +5,20 @@
 #include<unordered_set>
 #include "arete.h"
 
-Arete::Arete(std::string id,float cout1,float cout2,std::string S1,std::string S2):m_id{id},m_cout1{cout1},m_cout2{cout2},m_sommetdepart{S1},m_sommetarrive{S2}
+Arete::Arete(std::string id,std::vector<float>poid,std::string S1,std::string S2):m_id{id},m_poids{poid},m_sommetdepart{S1},m_sommetarrive{S2}
 {
 }
 
 void Arete::afficherDataArete() const
 {
     std::cout<<"    "<<m_id<<" : "<<"("<<m_sommetdepart<<","<<m_sommetarrive<<")"<<std::endl;
-    std::cout<<"       "<<"poids 1 : "<<m_cout1<<",  poids 2 : "<<m_cout2<<std::endl;
+    std::cout << "Vous avez la possibilite de choisir " << m_poids.size() << " poids differents" << std::endl;
+    std::cout << "Choississez de la valeur 0 a la valeur " << m_poids.size()-1 << " pour le poids" << std::endl;
+    for (int i = 0; i < m_poids.size(); ++i)
+    {
+       std::cout<<"       "<<"poids" << i << ": "<<m_poids[i]<<std::endl;
+    }
+
 }
 
 void Arete::dessinerChemin(Svgfile &fichier, std::vector<Sommet*> m_sommets)
@@ -79,15 +85,15 @@ Arete::~Arete()
     //dtor
 }
 
-float Arete::getCout1() const
+float Arete::getPoids(int poid) const
 {
-            return m_cout1;
+            return m_poids[poid];
 }
 
-float Arete::getCout2() const
+/*float Arete::getCout2() const
 {
             return m_cout2;
-}
+}*/
 std::string Arete::getS1()
 {
     return m_sommetdepart;

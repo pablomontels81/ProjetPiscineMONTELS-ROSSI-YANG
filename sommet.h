@@ -19,6 +19,7 @@ class Sommet
         void afficherVoisins();
         void dessinerSommet(Svgfile &fichier);
         void dessinerSommetC(Svgfile &fichier);
+        void dessinerT(Svgfile &fichier);
         ///méthode de parcours en largeur du graphe à partir du sommet
         ///renvoie les prédécesseurs sous forme d'une map (clé=id du sommet,valeur=id de son prédécesseur)
         std::unordered_map<std::string,std::string> parcoursBFS() const;

@@ -37,15 +37,18 @@ graphe::graphe(std::string nomFichierSommets,std::string nomFichierPoids)
         m_sommets.push_back(new Sommet{id,x,y});
     }
 
-    int taille1,taille2, nbre;
+
+
+    int taille1, taille2, nbre;
     ifsPoids >> taille2 >> nbre;
-    ifsSommet >> taille1;
+    ifsSommet >> taille1; //nbre d'aretes
     if (ifsPoids.fail() )
         throw std::runtime_error("Probleme lecture ordre du graphe");
     if (ifsSommet.fail() )
         throw std::runtime_error("Probleme lecture ordre du graphe");
+
     std::string Tampon;
-    float cout1,cout2;
+    std::vector<float>poid(nbre);
     std::string sommet1, sommet2;
 
     for (int i=0; i<taille1; i++)
@@ -62,15 +65,21 @@ graphe::graphe(std::string nomFichierSommets,std::string nomFichierPoids)
         ifsPoids>>Tampon;
         if(ifsSommet.fail())
             throw std::runtime_error("Probleme lecture données sommet");
-        ifsPoids>>cout1;
+        for(size_t z = 0; z<nbre; z++)
+            {
+                ifsPoids >> poid[z];
+                if (ifsPoids.fail())
+                    throw std::runtime_error("Probleme lecture données sommet");
+            }
+
         if(ifsSommet.fail())
             throw std::runtime_error("Probleme lecture données sommet");
-        ifsPoids>>cout2;
-        if(ifsSommet.fail())
-            throw std::runtime_error("Probleme lecture données sommet");
-        m_aretes.push_back(new Arete{id,cout1,cout2,sommet1,sommet2});
+        m_aretes.push_back(new Arete{id,poid,sommet1,sommet2});
         //prenne l'id du sommet et ajoute le voisin
         //prenne l'id du voisin et ajoute le sommet
+
+        ///VOISINS
+
         for (size_t j = 0; j<m_sommets.size(); ++j)
         {
             if (m_sommets[j]->getId()==sommet1)
@@ -88,9 +97,10 @@ graphe::graphe(std::string nomFichierSommets,std::string nomFichierPoids)
 
 }
 
-void graphe::Primcout1(Svgfile &svgout)
+std::vector<Arete*> graphe::Primcout1(int num)
 {
     //svgout.addGrid();
+
     std::vector<Arete*> graphe_prim;
     std::set<std::string> sommets_marques;
 
@@ -101,13 +111,12 @@ void graphe::Primcout1(Svgfile &svgout)
 
     ///TRI///
 
-    triCout1();
-
-    /*std::cout << "TRIER:" << std::endl;
+    triPoids(num); //soit 0 ou 1
+    std::cout << "TRIER:" << std::endl;
     for (auto a:m_aretes)
     {
         a->afficherIDArete();
-    }*/
+    }
 
     ///DEBUT PRIM///
 
@@ -124,7 +133,7 @@ void graphe::Primcout1(Svgfile &svgout)
     int tamp1, tamp2;
     int stop = 0;
     int top = m_aretes.size();
-    for (int i = 0; i<(m_sommets.size()-2); i++)
+    for (size_t i = 0; i<(m_sommets.size()-2); i++)
     {
         for (int j = 0; j<top; ++j)
         {
@@ -153,6 +162,15 @@ void graphe::Primcout1(Svgfile &svgout)
         stop =0;
     }
 
+    return graphe_prim;
+}
+
+void graphe::dessinerCheminPrim(Svgfile &svgout, int num)
+{
+    std::vector<Arete*> graphe_prim;
+
+    graphe_prim = Primcout1(num);
+
     ///AFFICHAGE
 
     std::cout<<"Resultat Prim : Arbre couvrant de Poids Minimum: "<<std::endl;
@@ -160,6 +178,7 @@ void graphe::Primcout1(Svgfile &svgout)
     {
         elemAretePrim->afficherIDArete();
     }
+
     for (auto elemAretePrim : graphe_prim)
     {
         elemAretePrim->dessinerChemin(svgout,m_sommets);
@@ -189,11 +208,13 @@ void graphe::afficher() const
 
 }
 
-void graphe::dessiner(Svgfile &svgout) const
+void graphe::dessinerGraphe(Svgfile &svgout) const
 {
+
     for (auto elemSommet : m_sommets)
     {
         elemSommet->dessinerSommet(svgout);
+
     }
     for (auto elemArete : m_aretes)
     {
@@ -201,21 +222,21 @@ void graphe::dessiner(Svgfile &svgout) const
     }
 }
 
-std::vector<Arete*> graphe::triCout1()
+std::vector<Arete*> graphe::triPoids(int poid)
 {
-    std::sort(m_aretes.begin(),m_aretes.end(),[](Arete* a1, Arete* a2)
+    std::sort(m_aretes.begin(),m_aretes.end(),[poid](Arete* a1, Arete* a2)
     {
-        return a1->getCout1() < a2->getCout1() ;
+        return a1->getPoids(poid) < a2->getPoids(poid) ;
     });
 }
 
-std::vector<Arete*> graphe::triCout2()
+/*std::vector<Arete*> graphe::triCout2()
 {
     std::sort(m_aretes.begin(),m_aretes.end(),[](Arete* a1, Arete* a2)
     {
         return a1->getCout2() < a2->getCout2() ;
     });
-}
+}*/
 
 int graphe::eulerien(std::set <Sommet*> vec)
 {

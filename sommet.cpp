@@ -40,6 +40,11 @@ void Sommet::dessinerSommet(Svgfile &fichier)
     fichier.addText(m_x+110, m_y-10, m_id, "violet");
 }
 
+void Sommet::dessinerT(Svgfile &fichier)
+{
+    fichier.addText(m_x+500,m_y+200,"Graphe test","black");
+}
+
 
 double Sommet::getX()
 {
