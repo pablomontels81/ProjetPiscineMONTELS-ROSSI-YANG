@@ -14,16 +14,19 @@ class Arete
 {
     public:
         ///constructeur qui reçoit en params les données du sommet
-        Arete(std::string,float,float,std::string,std::string);
+        Arete(std::string,std::vector<float>,std::string,std::string);
         //void ajouterArete(const Arete*);
         void afficherDataArete() const;
         void afficherIDArete() const;
-        float getCout1() const;
+        float getPoids(int poid) const;
         float getCout2() const;
-        std::string getS1() const;
+        std::string getS1();
         std::string getS2() const;
-        void dessinerArete(Svgfile &fichier, std::vector<Sommet*> m_sommets);
-
+        void dessinerGraphe(Svgfile &fichier, std::vector<Sommet*> m_sommets);
+        void dessinerChemin(Svgfile &fichier, std::vector<Sommet*> m_sommets, int dec);
+        void setMarq(bool marq);
+        bool getMarq();
+        std::string getId();
         /*
         void afficherVoisinsPondere() const;
         ///méthode de parcours en largeur du graphe à partir du sommet
@@ -37,6 +40,8 @@ class Arete
         */
         ~Arete();
 
+
+
     protected:
 
     private:
@@ -45,8 +50,10 @@ class Arete
         std::string m_id; // Identifiant
         float m_cout1, m_cout2; // Poids de l'arête
         std::vector<Sommet*> m_sommets;
-        std::string m_sommetdepart, m_sommetarrive; //Sommet départ et arrivée
+        std::vector<float> m_poids;
+        std::string m_sommetdepart, m_sommetarrive;//Sommet départ et arrivée
 
+        bool m_marq = false;
 };
 
 #endif // ARETE_H_INCLUDED

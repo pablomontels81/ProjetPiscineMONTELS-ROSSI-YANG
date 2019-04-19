@@ -20,7 +20,7 @@ class Svgfile
 
     public:
 
-        Svgfile(std::string _filename = "output.svg", int _width=1000, int _height=800);
+        Svgfile(std::string _filename = "output.svg", int _width=1400, int _height=800);
         ~Svgfile();
 
         void addDisk(double x, double y, double r, std::string color=defcol);
