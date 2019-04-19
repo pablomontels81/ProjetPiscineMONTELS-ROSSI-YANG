@@ -17,6 +17,7 @@ public:
     ~graphe();
     void afficher() const;
     void Pareto();
+    void Algo_Djik(int sommet_depart, int sommet_arrivee) const;
     void dessinerGraphe(Svgfile &svgout,std::string texte) const;
     void dessiner_Combinaison_Pareto(Svgfile &fichier_pareto) ;
     std::vector<Arete*> Prim(int num);
@@ -27,6 +28,8 @@ public:
     void EnumerationBinaire() ;
     //void Kruskal();
     std::string changement_float (float val);
+    void Dijkstra() const;
+
 
 
 protected:

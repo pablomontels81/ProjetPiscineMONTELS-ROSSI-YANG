@@ -7,7 +7,7 @@ int main()
 {
     Svgfile svgout;
     Svgfile out("Pareto.svg");
-
+    std::vector<std::string> m;
     //Déclaration des vecteurs de type Arete allant prendre le vecteur d'Arete trié
     graphe g0("broadway.txt","broadway_weights_0.txt");
     graphe g1("triville.txt","triville_weights_0.txt");
@@ -15,13 +15,15 @@ int main()
     graphe g3("manhattan.txt","manhattan_weights_0.txt");
 
 
+    g0.Algo_Djik(0,4);
+    //g0.Dijkstra();
     //g0.afficher();
     //g0.dessinerGraphe(svgout,"Graphe");
     //g0.dessinerCheminPrim(svgout); //0 pour poids 0
 
-    g0.EnumerationBinaire();
-    g0.Pareto();
-    g0.dessiner_Combinaison_Pareto(out);
+    //g0.EnumerationBinaire();
+    //g0.Pareto();
+    //g0.dessiner_Combinaison_Pareto(out);
 
     //system("PAUSE");
     //g1.dessiner_Combinaison_Pareto();

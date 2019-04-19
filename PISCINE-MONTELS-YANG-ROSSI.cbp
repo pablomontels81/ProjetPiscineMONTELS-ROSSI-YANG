@@ -32,6 +32,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="PoidsTT.cpp" />
+		<Unit filename="PoidsTT.h" />
 		<Unit filename="arete.cpp" />
 		<Unit filename="arete.h" />
 		<Unit filename="graphe.cpp" />

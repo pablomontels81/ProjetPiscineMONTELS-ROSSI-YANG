@@ -221,7 +221,7 @@ void graphe::dessinerCheminPrim(Svgfile &svgout)
         poids = poids + changement_float(coup[m_nbCout-1]);
 
 
-        svgout.addText(800 , 100 + i*400,("(" + poids + ")"), "black");
+        svgout.addText(800, 100 + i*400,("(" + poids + ")"), "black");
 
 
         for (auto s : m_sommets)
@@ -288,6 +288,242 @@ std::vector<Arete*> graphe::triPoids(int poid)
     });
 }*/
 
+void graphe::Algo_Djik(int sommet_depart, int sommet_arrivee) const
+{
+
+    std::vector<std::string> m_sommets_decouverts;
+    std::vector<Arete*> m_aretes_good_predecesseurs;
+    std::vector<Arete*> m_aretes_Djikstra;
+
+
+    ///FONCTION 1
+
+    ///Je Stock mon sommet de départ
+    m_sommets_decouverts.push_back(m_sommets[sommet_depart]->getId());
+
+    ///Boucle tant que on arrive pas à notre sommet d'arrivée
+
+
+        ///Je Parcours mon vecteurs d'aretes pour trouver aretes dont il serait une extremite
+        for (size_t aretes_en_cours=0; aretes_en_cours < m_aretes.size(); aretes_en_cours++)
+        {
+            ///Test si mon arete à comme extremité de debut mon predecesseur
+            if (m_aretes[aretes_en_cours]->getS1() == m_sommets_decouverts.back())
+            {
+                ///Ajoute Cette Aretes dans le vecteur d'aretes good predecesseur
+                m_aretes_good_predecesseurs.push_back(m_aretes[aretes_en_cours]);
+            }
+            ///Test si mon arete à comme extremité de fin mon predecesseur
+            if (m_aretes[aretes_en_cours]->getS2() == m_sommets_decouverts.back())
+            {
+                ///Ajoute Cette Aretes dans le vecteur d'aretes good predecesseur
+                m_aretes_good_predecesseurs.push_back(m_aretes[aretes_en_cours]);
+            }
+        }
+
+        ///CETTE PARTIE EST OPTIONELLE
+        ///Je Trie mon vecteur d'aretes ayant mon predecesseur comme extremité en fonction du Poids2
+        std::sort(m_aretes_good_predecesseurs.begin(),m_aretes_good_predecesseurs.end(),[](Arete* a1, Arete* a2)
+        {
+            return a1->getPoids(1) < a2->getPoids(1);
+        });
+
+        std::cout<<"Sommet : "<<m_sommets_decouverts.back()<<std::endl;
+
+        ///Recuperation de mon aretes de Poids Min et donc mon prochain sommet que je vais utiliser
+
+    ///FONCTION 2
+    ///JE CHERCHE SI UN DES VOISINS DE MON POINT DE DEPART EST LE SOMMET D'ARRIVEE
+    /*
+        for ( auto elem : m_aretes_good_predecesseurs)
+        {
+            ///SI MON VOISIN EST MON SOMMET D'ARRIVEE
+            if ((elem->getS1() == sommet_arrivee)||(elem->getS2() == sommet_arrivee)
+            {
+                m_sommets_decouverts.push_back(elem->getId());
+            }
+        }*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        ///Test si le sommet de depart et mon predecesseur alors j'ajoute le sommet d'arrivée
+        auto test1 = std::find(m_sommets_decouverts.begin(), m_sommets_decouverts.end(), m_aretes_good_predecesseurs.front()->getS1());
+        if ( test1 == m_sommets_decouverts.end())
+        {
+            m_sommets_decouverts.push_back(m_aretes_good_predecesseurs.front()->getS2());
+        }
+
+        ///Test si le sommet d'arrivée et mon predecesseur alors j'ajoute le sommet de depart
+        auto test2 = std::find(m_sommets_decouverts.begin(), m_sommets_decouverts.end(), m_aretes_good_predecesseurs.front()->getS2());
+        if ( test2 == m_sommets_decouverts.end())
+        {
+            m_sommets_decouverts.push_back(m_aretes_good_predecesseurs.front()->getS1());
+        }
+
+
+
+
+    /*
+    ///Boucle Pour Effectuer Un Djikstra Pour Chaque Sommet
+    for (size_t i=0; i<m_sommets.size(); i++)
+    {
+        ///Je clear mon vecteur de sommets decouverts
+        m_sommets_decouverts.clear();
+        std::cout<<m_sommets[sommet_depart]->getId()<<std::endl;
+        system("PAUSE");
+        ///J'ajoute a ce vecteur mon premier predecesseur
+        m_sommets_decouverts.push_back(m_sommets[0]->getId());
+        m_aretes_good_predecesseurs.clear();
+        ///Boucle Pour Récupérer l'ensemble des aretes ayant comme extremite notre sommet predecessant
+        for (size_t aretes_en_cours=0; aretes_en_cours < m_aretes.size(); aretes_en_cours++)
+        {
+            ///Test si mon arete à comme extremité de debut mon predecesseur
+            if (m_aretes[aretes_en_cours]->getS1() == m_sommets_decouverts.back())
+            {
+                ///Ajoute Cette Aretes dans le vecteur d'aretes good predecesseur
+                m_aretes_good_predecesseurs.push_back(m_aretes[aretes_en_cours]);
+            }
+            ///Test si mon arete à comme extremité de fin mon predecesseur
+            if (m_aretes[aretes_en_cours]->getS2() == m_sommets_decouverts.back())
+            {
+                ///Ajoute Cette Aretes dans le vecteur d'aretes good predecesseur
+                m_aretes_good_predecesseurs.push_back(m_aretes[aretes_en_cours]);
+            }
+        }
+
+        ///Je Trie mon vecteur d'aretes ayant mon predecesseur comme extremité en fonction du Poids2
+        std::sort(m_aretes_good_predecesseurs.begin(),m_aretes_good_predecesseurs.end(),[](Arete* a1, Arete* a2)
+        {
+            return a1->getPoids(1) < a2->getPoids(1);
+        });
+        ///Recuperation de mon aretes de Poids Min et donc mon prochain sommet que je vais utiliser
+        ///Test si le sommet de depart n'a pas déjà été découvert
+        auto test1 = std::find(m_sommets_decouverts.begin(), m_sommets_decouverts.end(), m_aretes_good_predecesseurs.front()->getS1());
+        if ( test1 == m_sommets_decouverts.end())
+        {
+            m_sommets_decouverts.push_back(m_aretes_good_predecesseurs.front()->getS2());
+        }
+        ///Test si le sommet d'arriver et mon predecesseur alors j'ajoute le sommet de depart
+        auto test2 = std::find(m_sommets_decouverts.begin(), m_sommets_decouverts.end(), m_aretes_good_predecesseurs.front()->getS2());
+        if ( test2 == m_sommets_decouverts.end())
+        {
+            m_sommets_decouverts.push_back(m_aretes_good_predecesseurs.front()->getS1());
+        }
+        std::cout<<"Prochain Sommet : "<<m_sommets_decouverts.back()<<std::endl;
+        system("PAUSE");
+        std::cout<<"Aretes ayant comme predecesseur le sommet au dessus"<<std::endl;
+        for (auto elem : m_aretes_good_predecesseurs)
+        {
+            std::cout<<elem->getId()<<"-";
+        }
+        std::cout<<""<<std::endl;
+        std::cout<<"Aretes de Poids Min : "<<m_aretes_good_predecesseurs.front()->getId()<<std::endl;
+        std::cout<<
+                 system("PAUSE");
+
+
+        ///Stockage de mon aretes de poids Min
+        m_aretes_Djikstra.push_back(m_aretes_good_predecesseurs.front());
+
+    std::cout<<" "<<std::endl;
+    }*/
+
+}
+/*
+void graphe::Dijkstra() const
+{
+
+    std::vector<std::string>m_dec;
+
+
+    std::vector<std::string>m_ba;
+
+
+
+    //m_dec.push_back(m_sommets[0]->getId());
+    //m_sommets[0]->setMarq(true);
+
+
+    for(size_t i=0; i<m_sommets.size(); ++i)
+    {
+
+        m_dec.push_back(m_sommets[i]->getId());
+        system("PAUSE");
+        do
+        {
+            for(int j=0 ; j<m_sommets.size(); j++)
+            {
+                m_ba.clear();
+                for(size_t j=0; j<m_aretes.size(); ++j)
+                {
+                    system("PAUSE");
+                    //Test si mon arete à comme extremité de debut mon predecesseur
+                    if (m_aretes[j]->getS1() == m_dec.back())
+                    {
+                        m_ba.push_back(m_aretes[j]->getId());
+                    }
+                    //Test si mon arete à comme extremité de fin mon predecesseur
+                    if (m_aretes[j]->getS2() == m_dec.back())
+                    {
+                        m_ba.push_back(m_aretes[j]->getId());
+                    }
+
+                }
+
+                std::sort(m_ba.begin(),m_ba.end(),[](Arete* a1, Arete* a2)
+                {
+                    return a1->getPoids(1) < a2->getPoids(1);
+                });
+
+                for (auto elem : m_ba)
+                {
+                    std::cout<<"  "<<elem;
+                }
+                system("PAUSE");
+
+
+
+                if (m_ba.front() == m_sommets[i]->getId())
+                {
+                    m_dec.push_back(m_ba.front()->getS2());
+                    m_ba.front()->setMarq(true);
+
+                }
+                if (m_ba.front() == m_sommets[i]->getId())
+                {
+                    m_dec.push_back(m_ba.front()->getS1());
+                    m_ba.front()->setMarq(true);
+                }
+
+            }
+        }
+        while(m_dec.size()!= m_sommets.size());
+
+        m_dec.clear();
+
+
+
+    }
+
+}
+*/
 int graphe::eulerien(std::set <Sommet*> vec)
 {
     int compt=0; //sert à compter le nbre de sommets paires
@@ -379,7 +615,7 @@ void graphe::EnumerationBinaire()
         vecteur_valeur_conversion.push_back(pow(2,i));
     }
     ///Trie Ordre 1
-    for (int Combinaison=0; Combinaison<NbreMaxCombinaison ;Combinaison++)
+    for (int Combinaison=0; Combinaison<NbreMaxCombinaison ; Combinaison++)
     {
         //Remise à zéro des variables de Test du Trie
         vecteur_sommet_parcourus.clear();
@@ -419,7 +655,8 @@ void graphe::EnumerationBinaire()
 
             }
 
-        }while (rest == 0);//Condition de Sortie pour obtenir notre nombre binaire
+        }
+        while (rest == 0); //Condition de Sortie pour obtenir notre nombre binaire
         //Test Ajout de la Combinaison Binaire SSI Nbre Aretes = Ordre - 1
 
         if (Compteur_Nbre_Arete == (ordre-1))
@@ -454,8 +691,8 @@ void graphe::EnumerationBinaire()
             //system("PAUSE");
             if ( vecteur_enumeration_binaire[Num_Colonne][Num_Ligne] == 1)
             {
-                auto result1 = std::find(vecteur_sommet_parcourus.begin() , vecteur_sommet_parcourus.end(), m_aretes[Num_Ligne]->getS1());
-                auto result2 = std::find(vecteur_sommet_parcourus.begin() , vecteur_sommet_parcourus.end(), m_aretes[Num_Ligne]->getS2());
+                auto result1 = std::find(vecteur_sommet_parcourus.begin(), vecteur_sommet_parcourus.end(), m_aretes[Num_Ligne]->getS1());
+                auto result2 = std::find(vecteur_sommet_parcourus.begin(), vecteur_sommet_parcourus.end(), m_aretes[Num_Ligne]->getS2());
                 if (result1 == vecteur_sommet_parcourus.end())
                 {
                     vecteur_sommet_parcourus.push_back(m_aretes[Num_Ligne]->getS1());
@@ -513,7 +750,8 @@ void graphe::Pareto()
     PoidsTT* Valeur_Test1;
     PoidsTT* Valeur_Test2;
     //float Valeur_Test_Debut, Valeur_Test_Fin;
-    std::sort(m_PoidsTT.begin(), m_PoidsTT.end(), [](PoidsTT* a, PoidsTT* b) {
+    std::sort(m_PoidsTT.begin(), m_PoidsTT.end(), [](PoidsTT* a, PoidsTT* b)
+    {
         if (a->getPoids1() == b->getPoids1() && a->getPoids2() < b->getPoids2())
         {
             return a->getPoids1() > b->getPoids1();
@@ -542,11 +780,11 @@ void graphe::Pareto()
         for (int elem = 1; elem < m_PoidsTT.size(); elem ++)
         {
             if (
-                 m_PoidsTT[elem]->getPoids1() > Valeur_Test2->getPoids1()&& //Le Poids1 de la combinaisons et supérieur que ma valeur de Test
+                m_PoidsTT[elem]->getPoids1() > Valeur_Test2->getPoids1()&& //Le Poids1 de la combinaisons et supérieur que ma valeur de Test
 
-                 m_PoidsTT[elem]->getPoids2() > Valeur_Test2->getPoids2()
+                m_PoidsTT[elem]->getPoids2() > Valeur_Test2->getPoids2()
 
-                )
+            )
             {
                 ///Ajout Au Vecteur Final de mes Vecteurs dominés(valeur FALSE)
                 m_PoidsTT_Post_Pareto.insert(new PoidsTT {m_PoidsTT[elem]->getPoids1(),m_PoidsTT[elem]->getPoids2(),false});
