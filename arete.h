@@ -23,9 +23,10 @@ class Arete
         std::string getS1();
         std::string getS2() const;
         void dessinerGraphe(Svgfile &fichier, std::vector<Sommet*> m_sommets);
-        void dessinerChemin(Svgfile &fichier, std::vector<Sommet*> m_sommets);
+        void dessinerChemin(Svgfile &fichier, std::vector<Sommet*> m_sommets, int dec);
         void setMarq(bool marq);
         bool getMarq();
+        std::string getId();
         /*
         void afficherVoisinsPondere() const;
         ///méthode de parcours en largeur du graphe à partir du sommet

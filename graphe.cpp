@@ -2,7 +2,6 @@
 #include <iostream>
 #include <sstream>
 #include "graphe.h"
-
 #include "algorithm"
 
 graphe::graphe(std::string nomFichierSommets,std::string nomFichierPoids)
@@ -18,7 +17,7 @@ graphe::graphe(std::string nomFichierSommets,std::string nomFichierPoids)
 
     int ordre;
     ifsSommet >> ordre;
-    if ( ifsSommet.fail() )
+    if (ifsSommet.fail() )
         throw std::runtime_error("Probleme lecture ordre du graphe");
     std::string id;
     double x,y;
@@ -46,6 +45,7 @@ graphe::graphe(std::string nomFichierSommets,std::string nomFichierPoids)
         throw std::runtime_error("Probleme lecture ordre du graphe");
     if (ifsSommet.fail() )
         throw std::runtime_error("Probleme lecture ordre du graphe");
+    m_nbCout = nbre;
 
     std::string Tampon;
     std::vector<float>poid(nbre);
@@ -66,11 +66,11 @@ graphe::graphe(std::string nomFichierSommets,std::string nomFichierPoids)
         if(ifsSommet.fail())
             throw std::runtime_error("Probleme lecture données sommet");
         for(size_t z = 0; z<nbre; z++)
-            {
-                ifsPoids >> poid[z];
-                if (ifsPoids.fail())
-                    throw std::runtime_error("Probleme lecture données sommet");
-            }
+        {
+            ifsPoids >> poid[z];
+            if (ifsPoids.fail())
+                throw std::runtime_error("Probleme lecture données sommet");
+        }
 
         if(ifsSommet.fail())
             throw std::runtime_error("Probleme lecture données sommet");
@@ -97,12 +97,11 @@ graphe::graphe(std::string nomFichierSommets,std::string nomFichierPoids)
 
 }
 
-std::vector<Arete*> graphe::Primcout1(int num)
+std::vector<Arete*> graphe::Prim(int num)
 {
     //svgout.addGrid();
 
     std::vector<Arete*> graphe_prim;
-    std::set<std::string> sommets_marques;
 
     /*for (auto a:m_aretes)
     {
@@ -112,11 +111,11 @@ std::vector<Arete*> graphe::Primcout1(int num)
     ///TRI///
 
     triPoids(num); //soit 0 ou 1
-    std::cout << "TRIER:" << std::endl;
+    /*std::cout << "TRIER:" << std::endl;
     for (auto a:m_aretes)
     {
         a->afficherIDArete();
-    }
+    }*/
 
     ///DEBUT PRIM///
 
@@ -144,10 +143,10 @@ std::vector<Arete*> graphe::Primcout1(int num)
 
                 if (m_sommets[tamp1]->getMarq()!= true && m_sommets[tamp2]->getMarq()== true)
                 {
-                   m_sommets[tamp1]->setMarq(true);
-                   m_aretes[j]->setMarq(true);
-                   graphe_prim.push_back(m_aretes[j]);
-                   stop=1;
+                    m_sommets[tamp1]->setMarq(true);
+                    m_aretes[j]->setMarq(true);
+                    graphe_prim.push_back(m_aretes[j]);
+                    stop=1;
                 }
 
                 else if (m_sommets[tamp1]->getMarq()== true && m_sommets[tamp2]->getMarq()!= true)
@@ -165,27 +164,77 @@ std::vector<Arete*> graphe::Primcout1(int num)
     return graphe_prim;
 }
 
-void graphe::dessinerCheminPrim(Svgfile &svgout, int num)
+void graphe::dessinerCheminPrim(Svgfile &svgout)
 {
-    std::vector<Arete*> graphe_prim;
 
-    graphe_prim = Primcout1(num);
+    std::vector<Arete*> graphe_prim1;
 
-    ///AFFICHAGE
+    std::vector<float> coup;
 
-    std::cout<<"Resultat Prim : Arbre couvrant de Poids Minimum: "<<std::endl;
-    for (auto elemAretePrim : graphe_prim)
+
+
+    for (int i=0; i<m_nbCout; i++)
     {
-        elemAretePrim->afficherIDArete();
-    }
+        for(int z=0; z<m_nbCout; ++z)
+        {
+            coup.push_back(0);
+        }
+        graphe_prim1 = Prim(i);
 
-    for (auto elemAretePrim : graphe_prim)
-    {
-        elemAretePrim->dessinerChemin(svgout,m_sommets);
-    }
-    for (auto elemAretePrim : m_sommets)
-    {
-        elemAretePrim->dessinerSommetC(svgout);
+        std::cout<<"Resultat Prim : Arbre couvrant de Poids Minimum: "<<std::endl;
+        for (auto elemAretePrim : graphe_prim1)
+        {
+            elemAretePrim->afficherIDArete();
+        }
+
+        for (auto elemAretePrim : graphe_prim1)
+        {
+            elemAretePrim->dessinerChemin(svgout,m_sommets,i*370);
+        }
+        for (auto elemAretePrim : m_sommets)
+        {
+            elemAretePrim->dessinerSommetC(svgout,i*370);
+        }
+
+        for(size_t j=0; j< graphe_prim1.size(); ++j)
+        {
+            if(graphe_prim1[j]->getMarq()==true)
+            {
+                for(int a=0; a<m_nbCout; ++a)
+                {
+                    coup[a] += graphe_prim1[j]->getPoids(a);
+                }
+            }
+        }
+
+        std::string poids;
+
+
+        std::cout<< "(";
+        for(int a=0; a<m_nbCout-1; ++a)
+        {
+            std::cout<<coup[a]<< ";";
+            poids = changement_float(coup[a]) + ";" + poids;
+        }
+        std::cout << coup[m_nbCout-1] << ")" << std::endl;
+
+        poids = poids + changement_float(coup[m_nbCout-1]);
+
+
+        svgout.addText(800 , 100 + i*400,("(" + poids + ")"), "black");
+
+
+        for (auto s : m_sommets)
+        {
+            s->setMarq(false);
+        }
+
+        for (auto a : m_aretes)
+        {
+            a->setMarq(false);
+        }
+
+        coup.clear();
     }
 }
 
@@ -208,8 +257,9 @@ void graphe::afficher() const
 
 }
 
-void graphe::dessinerGraphe(Svgfile &svgout) const
+void graphe::dessinerGraphe(Svgfile &svgout,std::string texte) const
 {
+    svgout.addText(600,50,texte,"balck");
 
     for (auto elemSommet : m_sommets)
     {
@@ -264,158 +314,38 @@ int graphe::eulerien(std::set <Sommet*> vec)
     return re;
 }
 
-/*void graphe::Kruskal()
+///Fonction d'énumération binaire des 2^taille combinaisons
+
+void graphe::dessiner_Combinaison_Pareto(Svgfile &svgout) const
 {
-    Svgfile svgout;
-    svgout.addGrid();
-    std::vector<Arete*> graphe_kruskal;
-    std::set<Sommet*> sommets_marques;
 
-    for (auto a:m_aretes)
+    //Récupération des ID des Aretes a Dessiner
+    std::vector<std::string> m_vecteur_aretes_pareto;
+    for (int Num_Colonne = 0; Num_Colonne<m_vecteur_test_pareto.size(); Num_Colonne++)
     {
-        a->afficherIDArete();
-    }
-
-    ///TRI///
-    triCout1();
-    std::cout << "TRIER:" << std::endl;
-    for (auto a:m_aretes)
-    {
-        a->afficherIDArete();
-    }
-
-    ///DEBUT KRUSKAL
-
-    int taille = (m_sommets.size()-1);
-    std::cout << "TAILLE " << taille << std::endl;
-    int cmpt = 0;
-    int val = 0;
-    int marq;
-
-    ///TEST KRUSKAL 1///
-
-    for (auto a : m_aretes)
-    {
-        //si elem_arete_en_cours->getS1()==sommets_marques->getId()
-        //auto test1 = std::find(sommets_marques->getId().begin(), sommets_marques->getId().end(), elem_arete_en_cours->getS1());
-        //auto test2 = std::find(sommets_marques->getId().begin(), sommets_marques->getId().end(), elem_arete_en_cours->getS2());
-
-        if (taille!=cmpt)
+        m_vecteur_aretes_pareto.clear();
+        for (int Num_Ligne = 0; Num_Ligne<m_aretes.size(); Num_Ligne++)
         {
-            if(val==0)
+            if ( m_vecteur_test_pareto[Num_Colonne][Num_Ligne] == 1)
             {
-                //pour savoir si cycle ou pas, cycle retourne 2 donc  nous = 0
-                for (int i = 0; i<m_sommets.size(); i++)
-                {
-                    std::string id_S1 = a->getS1();
-                    std::string id_S2 = a->getS2();
-
-                    //recupere les deux sommets qui correspodent au id pour avoir des types sommets
-                    if (id_S1 == m_sommets[i]->getId()) ///et s'il na pas deja ete marque
-                    {
-                        sommets_marques.insert(m_sommets[i]);
-                        //m_sommets[i]->afficherVoisins();
-                    }
-
-                    if (id_S2 == m_sommets[i]->getId()) ///et s'il na pas deja ete marque
-                    {
-                        sommets_marques.insert(m_sommets[i]);
-                        m_sommets[i]->afficherVoisins(); //set enleve std::set< > (vector.begin,)  .insert custom predica lambda
-                    }
-                    val=eulerien(sommets_marques);
-                }
-                graphe_kruskal.push_back(a);
-                cmpt = cmpt + 1;
-                std::cout << "        cmpt = " << cmpt << std::endl;
-
-
+                m_vecteur_aretes_pareto.push_back(m_aretes[Num_Ligne]->getId());
             }
-        }
+
+            ///Place là l'affichage !!!!!!///
 
 
-    }
-    for (auto s : sommets_marques)
-    {
-        s->afficherData();
-    }
-
-    std::cout << "VALEUR EULE " << val << std::endl;
-
-    ///TEST KRUSKAL 2 ///
-
-    std::string sommet1;
-    std::string sommet2;
-    int num1, num2, marq1, marq2;
-    int cmpt = 0;
-    int retiens;
-    int taille = (m_sommets.size()-1);
-
-    for (size_t i = 0; i< m_aretes.size(); ++i)
-    {
-        if(taille!=cmpt)
-        {
-            sommet1 = m_aretes[i]->getS1();
-            num1 = std::stoi(sommet1);
-
-            sommet2 = m_aretes[i]->getS2();
-            num2 = std::stoi(sommet2);
-
-            marq1 = sommets_marques[num1];
-            marq2 = sommets_marques[num2];
-
-            ///recuperer les indices du sommets_marques
-            if (marq1 != marq2)
-            {
-                graphe_kruskal.push_back(m_aretes[i]);
-                cmpt = cmpt + 1;
-                for (int j = 0; j<sommets_marques.size(); j++)
-                {
-                }
-
-                std::cout << "TAB TOUR " << i<< ":" << std::endl;
-                for (auto s:sommets_marques)
-                {
-                    std::cout<< s << std::endl;
-                }
-            }
         }
     }
-
-    ///TEST KRUSKAL 3 ///
-    for (auto elem_arete_en_cours : m_aretes)
-    {
-        auto test1 = std::find(sommets_marques.begin(), sommets_marques.end(), elem_arete_en_cours->getS1());
-        auto test2 = std::find(sommets_marques.begin(), sommets_marques.end(), elem_arete_en_cours->getS2());
-        if (
-            (test1 == sommets_marques.end())&&(test2 == sommets_marques.end())
-            ||
-            (test1 != sommets_marques.end())&&(test2 == sommets_marques.end())
-            ||
-            (test1 == sommets_marques.end())&&(test2 != sommets_marques.end())
-            //rajouter que cela ne doit pas faire de cycle si on ajoute les nouveaux sommets->regarder les voisins -> donc creer les voisins de mon sommet
-        )
-        {
-            sommets_marques.push_back(elem_arete_en_cours->getS1());
-            sommets_marques.push_back(elem_arete_en_cours->getS2());
-            graphe_kruskal.push_back(elem_arete_en_cours);
-        }
-    }
-    std::cout<<"Resultat Kruskal : Arbre couvrant de Poids Minimum: "<<std::endl;
-    for (auto elemAreteKruskal : graphe_kruskal)
-    {
-        elemAreteKruskal->afficherIDArete();
-    }
-
-}*/
+}
 
 
 ///Fonction d'énumération binaire des 2^taille combinaisons
-void graphe::EnumerationBinaire() const
+void graphe::EnumerationBinaire()
 {
     std::vector<std::vector<bool>> vecteur_enumeration_binaire;
     std::vector<int> vecteur_valeur_conversion;
-    std::vector<std::vector<bool>> vecteur_enumeration_binaire_Trie1;
     std::vector<bool> vecteur_temporaire;
+    std::set<std::string> vecteur_sommet_parcourus;
     double taille = m_aretes.size();
     int ordre = m_sommets.size();
     int valeur_comparaison;
@@ -431,55 +361,90 @@ void graphe::EnumerationBinaire() const
     {
         vecteur_valeur_conversion.push_back(pow(2,i));
     }
-    /*
-    for (auto elemValeurConversion : vecteur_valeur_conversion)
-    {
-        std::cout<<elemValeurConversion<<std::endl;
-    }
-    */
+    ///Trie Ordre 1
     for (int Combinaison=0; Combinaison<NbreMaxCombinaison ;Combinaison++)
     {
         //Remise à zéro des variables de Test du Trie
+        vecteur_sommet_parcourus.clear();
         Compteur_Nbre_Arete = 0;
         Test_Connexite =0;
         NbreAMettreBinaire = Combinaison;
         do
         {
+            //Re-Initialisation du vecteur
+            //vecteur_sommet_parcourus.erase();
             for (int j=(taille-1); j>=0; j--)
             {
                 if(NbreAMettreBinaire-pow(2,j) >= 0)
                 {
                     NbreAMettreBinaire=NbreAMettreBinaire-pow(2,j);
                     vecteur_temporaire.push_back(1);
+                    //vecteur_sommet_parcourus.push_back(m_aretes[j]->getS1());
+                    //vecteur_sommet_parcourus.push_back(m_aretes[j]->getS2());
                     Compteur_Nbre_Arete++;
-                    //Test_Connexite++;
+                    /*
+                    if (Test_Connexite == ((ordre-1)-1))
+                    {
+                        Test_Connexite = Test_Connexite;
+                    }
+                    else
+                    {
+                        Test_Connexite = 0;
+                    }
+                    */
                 }
                 else
                 {
                     NbreAMettreBinaire=NbreAMettreBinaire;
                     vecteur_temporaire.push_back(0);
-                    //if (Test_Connexite = (ordre-1))
-                    //{
-                    //    Test_Connexite=Test_Connexite;
-                    //}
-                    //else
-                    //{
-                    //    Test_Connexite=0;
-                    //}
+                    /*Test_Connexite++;*/
                 }
 
             }
 
         }while (rest == 0);//Condition de Sortie pour obtenir notre nombre binaire
         //Test Ajout de la Combinaison Binaire SSI Nbre Aretes = Ordre - 1
-        if (Compteur_Nbre_Arete == (ordre-1)/*&&(Test_Connexite != (ordre-1))*/)
+
+        if (Compteur_Nbre_Arete == (ordre-1))
         {
             vecteur_enumeration_binaire.push_back(vecteur_temporaire);
         }
         vecteur_temporaire.clear();
     }
-    /*
-    for (auto elemColonne : vecteur_enumeration_binaire)
+    ///Trie Ordre 2
+    for (int Num_Colonne = 0; Num_Colonne<vecteur_enumeration_binaire.size(); Num_Colonne++)
+    {
+        float cout1=0, cout2=0;
+        Compteur_Nbre_Arete = 0;
+        //system("PAUSE");
+        vecteur_sommet_parcourus.clear();
+        for (int Num_Ligne = 0; Num_Ligne<m_aretes.size(); Num_Ligne++)
+        {
+            std::cout<<"  "<<vecteur_enumeration_binaire[Num_Colonne][Num_Ligne];
+            if ( vecteur_enumeration_binaire[Num_Colonne][Num_Ligne] == 1)
+            {
+                vecteur_sommet_parcourus.insert(m_aretes[Num_Ligne]->getS1());
+                vecteur_sommet_parcourus.insert(m_aretes[Num_Ligne]->getS2());
+                cout1 += m_aretes[Num_Ligne]->getPoids(1);
+                cout2 += m_aretes[Num_Ligne]->getPoids(2);
+            }
+
+        }
+        std::cout<<"      Nbre de Sommets Parcourus : "<<vecteur_sommet_parcourus.size()<<std::endl;
+        //Condition de Connexité
+        if (vecteur_sommet_parcourus.size() == ordre)
+        {
+            //Insertion des Combinaisons Valables à mon vecteur
+            m_vecteur_test_pareto.push_back(vecteur_enumeration_binaire[Num_Colonne]);
+            //Insertion des Poids Totaux Pour la Pondération 1 et 2 à mon vecteur dedié
+            m_PoidsTT.push_back(new PoidsTT{cout1,cout2,false});
+
+        }
+    }
+
+    ///Boucle d'Affichage
+
+    for (auto elemColonne : m_vecteur_test_pareto)
     {
         Compteur_Nbre_Arete = 0;
         for (auto elemLigne : elemColonne)
@@ -490,18 +455,60 @@ void graphe::EnumerationBinaire() const
         }
         std::cout<<"      Nbre de 1 : "<<Compteur_Nbre_Arete<<std::endl;
     }
-    */
-    /*
-    float CoutTT_Poids1_Binaire, CoutTT_Poids2_Binaire;
-    for (auto elem_colonne : vecteur_enumeration_binaire)
+
+}
+
+
+
+void graphe::Pareto()
+{
+    ///1. Trie Croissant
+    PoidsTT* Valeur_Test_Debut;
+    PoidsTT* Valeur_Test_Fin;
+    //float Valeur_Test_Debut, Valeur_Test_Fin;
+    std::sort(m_PoidsTT.begin(), m_PoidsTT.end(), [](PoidsTT* a, PoidsTT* b) {
+        return a->getPoids1() > b->getPoids2();
+    });
+    do
     {
-        for (auto elem_ligne : elem_colonne)
+        ///1.1 Récupération Des Premiers Couples Comme Valeur De Base
+        Valeur_Test_Debut = m_PoidsTT.front();//1ere Valeur Du Vecteur
+        m_PoidsTT.erase(m_PoidsTT.begin());
+        Valeur_Test_Fin = m_PoidsTT.front();//2eme Valeur Du Vecteur
+
+        ///Ajout Au Vecteur Final de mes bons Vecteurs (valeur TRUE)
+        m_PoidsTT_Post_Pareto.push_back(new PoidsTT {Valeur_Test_Debut->getPoids1(),Valeur_Test_Debut->getPoids2(),true});
+        m_PoidsTT_Post_Pareto.push_back(new PoidsTT {Valeur_Test_Fin->getPoids1(),Valeur_Test_Fin->getPoids2(),true});
+
+        ///Boucle Pour Enlever les solutions dominées (en elevant dans la boucle la valeur qui nous sert de TEST
+        for (int elem = 1; elem < m_PoidsTT.size(); elem ++)
         {
-            CoutTT_Poids1_Binaire = CoutTT_Poids1_Binaire + ( elem_ligne * m_aretes[taille-elem_ligne] )
+            if (
+                (m_PoidsTT[elem]->getPoids1() > Valeur_Test_Fin->getPoids1())&& //Le Poids1 de la combinaisons et supérieur que ma valeur de Test
+                ( (m_PoidsTT[elem]->getPoids2() > Valeur_Test_Fin->getPoids2()) && (m_PoidsTT[elem]->getPoids2() < Valeur_Test_Debut->getPoids2()) )
+                )
+            {
+                ///Ajout Au Vecteur Final de mes Vecteurs dominés(valeur FALSE)
+                m_PoidsTT_Post_Pareto.push_back(new PoidsTT {m_PoidsTT[elem]->getPoids1(),m_PoidsTT[elem]->getPoids2(),false});
+                ///Suppression des ces Vecteurs dominés de mon vecteur
+                m_PoidsTT.erase(m_PoidsTT.begin()+elem);
+            }
         }
     }
-    */
+    while (m_PoidsTT.size() != 0);
 
+
+
+}
+
+
+
+
+std::string graphe::changement_float(float val)
+{
+    std::ostringstream o;
+    o << val;
+    return o.str();
 }
 
 
