@@ -321,15 +321,16 @@ void graphe::dessiner_Combinaison_Pareto(Svgfile &fichier_pareto)
     double x,y;
     for (auto elem_Pareto : m_PoidsTT_Post_Pareto)
     {
-        x = 10*(double)elem_Pareto->getPoids1();
-        y = 10*(double)elem_Pareto->getPoids2();
+        fichier_pareto.addGrid();
+        x = 30*(double)elem_Pareto->getPoids1();
+        y = 30*(double)elem_Pareto->getPoids2();
         if (elem_Pareto->getBool() != 0)
         {
-            fichier_pareto.addDisk(x,y,1,"green");
+            fichier_pareto.addDisk(x,y,5,"green");
         }
         else
         {
-            fichier_pareto.addDisk(x,y,1.5,"red");
+            fichier_pareto.addDisk(x,y,5,"red");
         }
         std::cout<<" [ "<<elem_Pareto->getPoids1()<<" , "<<elem_Pareto->getPoids2()<<" Favorable "<<elem_Pareto->getBool()<<std::endl;
 
