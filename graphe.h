@@ -6,6 +6,7 @@
 #include "sommet.h"
 #include "arete.h"
 #include"PoidsTT.h"
+#include"svgfile.h"
 
 class graphe
 {
@@ -17,15 +18,20 @@ public:
     void afficher() const;
     void Pareto();
     void dessinerGraphe(Svgfile &svgout,std::string texte) const;
-    void dessiner_Combinaison_Pareto(Svgfile &svgout) const;
+    void dessiner_Combinaison_Pareto(Svgfile &fichier_pareto) ;
     std::vector<Arete*> Prim(int num);
+    float Dijkstra2(std::vector<bool>arete,int sommetdep);
     void dessinerCheminPrim(Svgfile &svgout);
-    std::vector<Arete*> triPoids(int poid);
+    void triPoids(int poid);
     //std::vector<Arete*> triCout2();
     int eulerien(std::set<Sommet*> vec);
     void EnumerationBinaire() ;
-    //void Kruskal();
+
+    void parcoursBFS(std::vector<std::string>m_vecteur_combinaison);
     std::string changement_float (float val);
+    int rechercher_afficherToutesCC() const;
+    void EnumerationBinaireDij();
+    void recupGraphe(std::vector<bool> arete);
 
 
 protected:
@@ -36,7 +42,7 @@ private:
     std::vector<Arete*> m_aretes;//stockée dans un vecteur (pointeur sur l'arête)
     std::vector<std::vector<bool>> m_vecteur_test_pareto;
     std::vector<PoidsTT*> m_PoidsTT;
-    std::vector<PoidsTT*>m_PoidsTT_Post_Pareto;
-    int m_nbCout;
+    std::set<PoidsTT*>m_PoidsTT_Post_Pareto;
+    int m_nbCout, m_ordre;
 };
 #endif // GRAPHE_H

@@ -16,3 +16,8 @@ float PoidsTT::getPoids2() const
 {
     return Poids2;
 }
+
+bool PoidsTT::getBool() const
+{
+    return F_P;
+}

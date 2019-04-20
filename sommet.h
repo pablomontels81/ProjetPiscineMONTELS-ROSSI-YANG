@@ -14,7 +14,7 @@ class Sommet
     public:
         ///constructeur qui reçoit en params les données du sommet
         Sommet(std::string,double,double);
-        void ajouterVoisin(std::string);
+        void ajouterVoisin(const Sommet*);
         void afficherData() const;
         void afficherVoisins();
         void dessinerSommet(Svgfile &fichier);
@@ -31,18 +31,22 @@ class Sommet
         double getX();
         double getY();
         std::string getId();
+        float getPoids();
+        float setPoids(float poid);
         int Paire();
         bool getMarq();
         void setMarq(bool marq);
+        std::unordered_set<std::string> rechercherCC(std::unordered_set<std::string> &cc) const;
         ~Sommet();
 
     protected:
 
     private:
         /// Voisinage : liste d'adjacence
-        std::vector<std::string> m_voisins;
+        std::vector<const Sommet*> m_voisins;
 
         /// Données spécifiques du sommet
+        float m_poid;
         std::string m_id; // Identifiant
         double m_x, m_y; // Position
         bool m_marq = false;
