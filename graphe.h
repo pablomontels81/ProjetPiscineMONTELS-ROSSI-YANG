@@ -24,13 +24,20 @@ public:
     void triPoids(int poid);
 
     void Pareto();
-    void EnumerationBinairePareto();
-    void dessiner_Combinaison_Pareto(Svgfile &fichier_pareto);
+    std::vector<std::vector<bool>> EnumerationBinairePareto();
+    void dessiner_Combinaison_Pareto();
 
+    float Dijkstra(std::vector<bool>arete,int sommetdep);
+    float etape3(std::vector<bool>arete);
+    std::vector<std::vector<bool>> EnumerationBinaireDij();
+    void DijkstraTout();
+    void dessiner_Dijkstra();
 
     std::string changement_float (float val);
     int rechercher_afficherToutesCC() const;
     void recupGraphe(std::vector<bool> arete);
+
+    void recupGraphe_Dessine(std::vector<bool> arete, Svgfile &svgout);
 
 
 protected:
@@ -39,8 +46,8 @@ private:
     /// Le réseau est constitué d'une collection de sommets
     std::vector<Sommet*> m_sommets;//stockée dans un vecteur (pointeur sur le sommet)
     std::vector<Arete*> m_aretes;//stockée dans un vecteur (pointeur sur l'arête)
-    std::vector<std::vector<bool>> m_vecteur_test_pareto;
-    std::vector<std::vector<bool>> m_vecteur_test_dij;
+    //std::vector<std::vector<bool>> m_vecteur_test_pareto;
+    //std::vector<std::vector<bool>> m_vecteur_test_dij;
     std::vector<PoidsTT*> m_PoidsTT;
     std::set<PoidsTT*>m_PoidsTT_Post_Pareto;
     std::vector<PoidsTT*>m_PoidsTT_Post_Dij;

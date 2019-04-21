@@ -5,33 +5,94 @@
 
 int main()
 {
-    Svgfile svgout;
-    Svgfile out("Pareto.svg");
 
+//sinon getpoids
+    Svgfile svgout("Prim.svg");
     std::vector<bool>test;
-    test.push_back(0);
     test.push_back(1);
     test.push_back(1);
     test.push_back(0);
     test.push_back(1);
+    test.push_back(0);
+
     //Déclaration des vecteurs de type Arete allant prendre le vecteur d'Arete trié
     graphe g0("broadway.txt","broadway_weights_0.txt");
     graphe g1("triville.txt","triville_weights_0.txt");
     graphe g2("cubetown.txt","cubetown_weights_0.txt");
     graphe g3("manhattan.txt","manhattan_weights_0.txt");
-    graphe g4("antoine.txt","antoine_weights_0.txt"); //test pour verifier si cc marche
+
+    /*int menu=0;
+        std::cout<<"         PROJET INFORMATIQUE C++"<<std::endl<<std::endl;
+
+    do
+    {
+        std::cout<<std::endl<<"_______________ MENU _________________"<<std::endl<<std::endl<<std::endl;
+        std::cout<<"1. Lancement de l algorithme de Prim"<<std::endl;
+        std::cout<<"2. Dijkstra"<<std::endl;
+        std::cout<<"Quel est votre choix ? ";
+        std::cin>>menu;
+        std::cout<<std::endl;
 
 
 
-    //g0.afficher();
-    //g0.dessinerGraphe(svgout,"Graphe");
-    //g0.dessinerCheminPrim(svgout); //0 pour poids 0
+
+    ///g0.afficher();
+    ///g0.dessinerGraphe(svgout,"Graphe");
+    ///g0.dessinerCheminPrim(svgout); //0 pour poids 0
+
+    ///g0.EnumerationBinaire();
+    ///g0.Pareto();
+    ///g0.dessiner_Combinaison_Pareto(out);
+
+    ///system("PAUSE");
+    ///g1.dessiner_Combinaison_Pareto();
 
 
-    g0.EnumerationBinairePareto();
-    g0.Pareto();
-    g0.dessiner_Combinaison_Pareto(out);
 
+        switch(menu)
+        {
+        case 0:
+            break;
+
+        case 1:
+            {
+            g0.afficher();
+            g0.dessinerGraphe(svgout,"Graphe");
+            g0.dessinerCheminPrim(svgout); //0 pour poids 0
+
+            }
+            break;
+
+        case 2:
+            {
+                std::cout << g0.Dijkstra(test,0);
+            }
+            break;
+
+        case 3:
+            {
+                g0.dessiner_Combinaison_Pareto();
+            }
+            break;
+
+
+
+        default:
+            break;
+        }
+    }while (menu!=0);*/
+
+    g0.afficher();
+    g0.dessinerGraphe(svgout,"Graphe");
+    g0.dessinerCheminPrim(svgout); //0 pour poids 0
+
+
+    g0.dessiner_Combinaison_Pareto();
+
+    //std::cout << g0.Dijkstra(test,3);
+    g0.DijkstraTout();
+
+    //g0.EnumerationBinaireDij();
 
 
     //int ncc=g4.rechercher_afficherToutesCC();
