@@ -12,7 +12,7 @@ int main()
     test.push_back(0);
     test.push_back(1);
     test.push_back(1);
-    test.push_back(1);
+    test.push_back(0);
     test.push_back(1);
     //Déclaration des vecteurs de type Arete allant prendre le vecteur d'Arete trié
     graphe g0("broadway.txt","broadway_weights_0.txt");
@@ -27,11 +27,12 @@ int main()
     //g0.dessinerGraphe(svgout,"Graphe");
     //g0.dessinerCheminPrim(svgout); //0 pour poids 0
 
-    g3.EnumerationBinaire();
-    g3.Pareto();
-    g3.dessiner_Combinaison_Pareto(out);
 
-    //std::cout << g0.Dijkstra2(test);
+    g0.EnumerationBinairePareto();
+    g0.Pareto();
+    g0.dessiner_Combinaison_Pareto(out);
+
+    //std::cout << g0.Dijkstra(test,0);
 
     //int ncc=g4.rechercher_afficherToutesCC();
     //std::cout << "NBRE CC : " << ncc << std::endl;

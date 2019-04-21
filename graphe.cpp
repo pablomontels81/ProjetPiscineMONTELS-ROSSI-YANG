@@ -100,23 +100,11 @@ graphe::graphe(std::string nomFichierSommets,std::string nomFichierPoids)
 
 std::vector<Arete*> graphe::Prim(int num)
 {
-    //svgout.addGrid();
-
     std::vector<Arete*> graphe_prim;
-
-    /*for (auto a:m_aretes)
-    {
-        a->afficherIDArete();
-    }*/
 
     ///TRI///
 
-    triPoids(num); //soit 0 ou 1
-    /*std::cout << "TRIER:" << std::endl;
-    for (auto a:m_aretes)
-    {
-        a->afficherIDArete();
-    }*/
+    triPoids(num);
 
     ///DEBUT PRIM///
 
@@ -165,59 +153,62 @@ std::vector<Arete*> graphe::Prim(int num)
     return graphe_prim;
 }
 
-float graphe::Dijkstra2(std::vector<bool>arete, int sommetdep)
+float graphe::Dijkstra(std::vector<bool>arete, int sommetdep)
 {
     std::vector<int>m_dec;
     int m_marq;
     int compteur=0;
+    float poidtt =0;
     std::vector<Sommet*> sommets = m_sommets;
     std::vector<float> vecPoids;
     float poids;
     bool exist = false;
-    int tamp1,tamp2, tampSommet, pred;
+    int tamp1,tamp2,tampSommet,pred;
     sommets[sommetdep]->setPoids(0);
     m_marq = sommetdep;
     sommets[sommetdep]->setMarq(true);
 
-    do
+    for(size_t a = 0; a<m_sommets.size(); ++a)
     {
-        for(size_t i =0; i<arete.size(); ++i)
+        do
         {
-            tamp1 = stoi(m_aretes[i]->getS1());
-            tamp2 = stoi(m_aretes[i]->getS2());
-            if(arete[i] == true && ((m_marq == tamp1)||(tamp2==m_marq))&& sommets[tamp1]->getMarq()!= sommets[tamp2]->getMarq())
+            for(size_t i =0; i<arete.size(); ++i)
             {
-                if (sommets[tamp1]->getMarq()!= true && sommets[tamp2]->getMarq()== true)
+                tamp1 = stoi(m_aretes[i]->getS1()); ///changement de string en int
+                tamp2 = stoi(m_aretes[i]->getS2());
+
+                ///si arete marqué, aucun sommet marqué
+                if(arete[i] == true && ((m_marq == tamp1)||(tamp2==m_marq))&& sommets[tamp1]->getMarq()!= sommets[tamp2]->getMarq())
                 {
-                    tampSommet = tamp1;///sommet selec pour devient dec
-                    pred = tamp2; ///pred du sommet select
-                }
-                if (sommets[tamp1]->getMarq()== true && sommets[tamp2]->getMarq()!= true)
-                {
-                    tampSommet = tamp2;
-                    pred = tamp1;
-                }
-                poids = sommets[pred]->getPoids() + m_aretes[i]->getPoids(1);
-                for(size_t j = 0; j< m_dec.size(); ++j)
-                {
-                    if(m_dec[j]==tampSommet)
+                    if (sommets[tamp1]->getMarq()!= true && sommets[tamp2]->getMarq()== true)
                     {
-                        if(poids<sommets[tampSommet]->getPoids())
-                            sommets[tampSommet]->setPoids(poids);
-                        exist=true;
+                        tampSommet = tamp1;///sommet selec pour devient decouvert
+                        pred = tamp2; ///selecction du sommet précédent
                     }
+                    if (sommets[tamp1]->getMarq()== true && sommets[tamp2]->getMarq()!= true)
+                    {
+                        tampSommet = tamp2;
+                        pred = tamp1;
+                    }
+                    poids = sommets[pred]->getPoids() + m_aretes[i]->getPoids(1); ///valeur du poid
+                    for(size_t j = 0; j< m_dec.size(); ++j) ///Parcour du vecteur dec
+                    {
+                        if(m_dec[j]==tampSommet) ///sommet selec est déja decc
+                        {
+                            if(poids<sommets[tampSommet]->getPoids())
+                                sommets[tampSommet]->setPoids(poids);
+                            exist=true; ///Sommet marqué
+                        }
+                    }
+                    if(exist == false)
+                    {
+                        m_dec.push_back(tampSommet); ///ajout dans dec
+                        sommets[tampSommet]->setPoids(poids);
+                    }
+                    exist=false;
                 }
-                if(exist == false)
-                {
-                    m_dec.push_back(tampSommet);
-                    sommets[tampSommet]->setPoids(poids);
-                }
-                exist=false;
-
-
             }
-        }
-        for(size_t j=0; j<m_dec.size(); ++j)
+            for(size_t j=0; j<m_dec.size(); ++j) ///parccour du dec pour ajoutet les poids
             {
                 vecPoids.push_back(sommets[m_dec[j]]->getPoids());
             }
@@ -225,12 +216,12 @@ float graphe::Dijkstra2(std::vector<bool>arete, int sommetdep)
             {
                 return a1 < a2 ;
             });
-            for(size_t j=0; j<sommets.size(); ++j)
+            for(size_t j=0; j<sommets.size(); ++j) ///parcour des sommets
             {
-                if(sommets[j]->getPoids() == vecPoids[0] && sommets[j]->getMarq() == false)
+                if(sommets[j]->getPoids() == vecPoids[0] && sommets[j]->getMarq() == false) ///condition pour prendre le sommet avec poids minimum
                 {
                     m_marq = j;
-                    sommets[j]->setMarq(true);
+                    sommets[j]->setMarq(true); ///marq le sommet
                     compteur++;
                     for(size_t a =0; a<m_dec.size(); ++a)
                     {
@@ -244,14 +235,14 @@ float graphe::Dijkstra2(std::vector<bool>arete, int sommetdep)
             }
             vecPoids.clear();
 
-        //std::cout << compteur << std::endl;
-    }while(compteur != m_ordre-1);
+        }
+        while(compteur != m_ordre-1);
 
-    float poidtt =0;
+        for(int i = 0 ; i<m_ordre; ++i)
+        {
+            poidtt += sommets[i]->getPoids();
+        }
 
-    for(int i = 0 ; i<m_ordre;++i)
-    {
-        poidtt += sommets[i]->getPoids();
     }
     return poidtt;
 }
@@ -264,8 +255,6 @@ void graphe::dessinerCheminPrim(Svgfile &svgout)
     std::vector<Arete*> graphe_prim1;
 
     std::vector<float> coup;
-
-
 
     for (int i=0; i<m_nbCout; i++)
     {
@@ -401,13 +390,13 @@ void graphe::dessiner_Combinaison_Pareto(Svgfile &fichier_pareto)
 
 
 ///Fonction d'énumération binaire des 2^taille combinaisons
-void graphe::EnumerationBinaire()
+void graphe::EnumerationBinairePareto()
 {
     std::vector<std::vector<bool>> vecteur_enumeration_binaire;
     std::vector<int> vecteur_valeur_conversion;
     std::vector<bool> vecteur_temporaire;
     std::vector<std::string> vecteur_sommet_parcourus;
-    //std::set<std::string> vecteur_sommet_parcourus;
+
     size_t taille = m_aretes.size();
     size_t ordre = m_sommets.size();
     int rest =0;
@@ -441,22 +430,11 @@ void graphe::EnumerationBinaire()
                     //vecteur_sommet_parcourus.push_back(m_aretes[j]->getS1());
                     //vecteur_sommet_parcourus.push_back(m_aretes[j]->getS2());
                     Compteur_Nbre_Arete++;
-                    /*
-                    if (Test_Connexite == ((ordre-1)-1))
-                    {
-                        Test_Connexite = Test_Connexite;
-                    }
-                    else
-                    {
-                        Test_Connexite = 0;
-                    }
-                    */
                 }
                 else
                 {
                     NbreAMettreBinaire=NbreAMettreBinaire;
                     vecteur_temporaire.push_back(0);
-                    /*Test_Connexite++;*/
                 }
 
             }
@@ -465,11 +443,7 @@ void graphe::EnumerationBinaire()
 
         while (rest != 0); //Condition de Sortie pour obtenir notre nombre binaire
         //Test Ajout de la Combinaison Binaire SSI Nbre Aretes = Ordre - 1
-        /*for(size_t a=0; a<vecteur_temporaire.size();++a)
-        {
-            std::cout<< vecteur_temporaire[a];
-        }
-        std::cout << std::endl;*/
+
         if (Compteur_Nbre_Arete == (ordre-1))
         {
             recupGraphe(vecteur_temporaire);
@@ -485,12 +459,10 @@ void graphe::EnumerationBinaire()
     for (int Num_Colonne = 0; Num_Colonne<vecteur_enumeration_binaire.size(); Num_Colonne++)
     {
         Compteur_Nbre_Arete = 0;
-        //system("PAUSE");
+
         float CoutTT1= 0, CoutTT2= 0;
         for (int Num_Ligne = 0; Num_Ligne < m_aretes.size(); Num_Ligne++)
         {
-            //std::cout<<"  "<<vecteur_enumeration_binaire[Num_Colonne][Num_Ligne];
-            //system("PAUSE");
             if ( vecteur_enumeration_binaire[Num_Colonne][Num_Ligne] == 1)
             {
                 auto result1 = std::find(vecteur_sommet_parcourus.begin(), vecteur_sommet_parcourus.end(), m_aretes[Num_Ligne]->getS1());
@@ -503,19 +475,12 @@ void graphe::EnumerationBinaire()
                 {
                     vecteur_sommet_parcourus.push_back(m_aretes[Num_Ligne]->getS2());
                 }
-                //std::cout<<" "<<m_aretes[Num_Ligne]->getS1()<<" , "<<m_aretes[Num_Ligne]->getS2()<<std::endl;
                 CoutTT1 += m_aretes[Num_Ligne]->getPoids(0);
                 CoutTT2 += m_aretes[Num_Ligne]->getPoids(1);
                 m_vecteur_combinaison.push_back(m_aretes[Num_Ligne]->getId());
-                /*
-                for (int a=0; a<m_nbCout; a++)
-                {
-                    coup[a] += m_aretes[Num_Ligne]->getPoids(a);
-                }*/
             }
 
         }
-        //std::cout<<"      Nbre de Sommets Parcourus : "<<vecteur_sommet_parcourus.size()<<std::endl;
         //Condition de Connexité
         if (vecteur_sommet_parcourus.size() == ordre)
         {
@@ -535,7 +500,7 @@ void graphe::Pareto()
     ///1. Trie Croissant
     PoidsTT* Valeur_Test1;
     PoidsTT* Valeur_Test2;
-    //float Valeur_Test_Debut, Valeur_Test_Fin;
+
     std::sort(m_PoidsTT.begin(), m_PoidsTT.end(), [](PoidsTT* a, PoidsTT* b)
     {
         if (a->getPoids1() == b->getPoids1() && a->getPoids2() < b->getPoids2())
@@ -544,13 +509,13 @@ void graphe::Pareto()
         }
         return a->getPoids1() < b->getPoids1();
     });
-    /*
+
     for (auto elem : m_PoidsTT)
     {
         system("PAUSE");
         std::cout<<" Nbre De Solution Pareto : "<<m_PoidsTT.size();
         std::cout<<" [ "<<elem->getPoids1()<<" , "<<elem->getPoids2()<<" ] "<<std::endl;
-    }*/
+    }
 
     do
     {
@@ -569,7 +534,6 @@ void graphe::Pareto()
                 m_PoidsTT[elem]->getPoids1() > Valeur_Test2->getPoids1()&& //Le Poids1 de la combinaisons et supérieur que ma valeur de Test
 
                 m_PoidsTT[elem]->getPoids2() > Valeur_Test2->getPoids2()
-
             )
             {
                 ///Ajout Au Vecteur Final de mes Vecteurs dominés(valeur FALSE)
@@ -624,22 +588,11 @@ void graphe::EnumerationBinaireDij()
                     //vecteur_sommet_parcourus.push_back(m_aretes[j]->getS1());
                     //vecteur_sommet_parcourus.push_back(m_aretes[j]->getS2());
                     Compteur_Nbre_Arete++;
-                    /*
-                    if (Test_Connexite == ((ordre-1)-1))
-                    {
-                        Test_Connexite = Test_Connexite;
-                    }
-                    else
-                    {
-                        Test_Connexite = 0;
-                    }
-                    */
                 }
                 else
                 {
                     NbreAMettreBinaire=NbreAMettreBinaire;
                     vecteur_temporaire.push_back(0);
-                    /*Test_Connexite++;*/
                 }
 
             }
@@ -656,6 +609,43 @@ void graphe::EnumerationBinaireDij()
         }
         ///on fait la deuxieme condition avec la connexite si conn
         vecteur_temporaire.clear();
+    }
+    ////////
+    std::vector<float> coup;
+    std::vector<std::string> m_vecteur_combinaison;
+    for (int Num_Colonne = 0; Num_Colonne<vecteur_enumeration_binaire.size(); Num_Colonne++)
+    {
+        Compteur_Nbre_Arete = 0;
+
+        float CoutTT1= 0, CoutTT2= 0;
+        for (int Num_Ligne = 0; Num_Ligne < m_aretes.size(); Num_Ligne++)
+        {
+            if ( vecteur_enumeration_binaire[Num_Colonne][Num_Ligne] == 1)
+            {
+                auto result1 = std::find(vecteur_sommet_parcourus.begin(), vecteur_sommet_parcourus.end(), m_aretes[Num_Ligne]->getS1());
+                auto result2 = std::find(vecteur_sommet_parcourus.begin(), vecteur_sommet_parcourus.end(), m_aretes[Num_Ligne]->getS2());
+                if (result1 == vecteur_sommet_parcourus.end())
+                {
+                    vecteur_sommet_parcourus.push_back(m_aretes[Num_Ligne]->getS1());
+                }
+                if (result2 == vecteur_sommet_parcourus.end())
+                {
+                    vecteur_sommet_parcourus.push_back(m_aretes[Num_Ligne]->getS2());
+                }
+                CoutTT1 += m_aretes[Num_Ligne]->getPoids(0);
+                CoutTT2 += m_aretes[Num_Ligne]->getPoids(1);
+                m_vecteur_combinaison.push_back(m_aretes[Num_Ligne]->getId());
+            }
+
+        }
+        //Condition de Connexité
+        if (vecteur_sommet_parcourus.size() == ordre)
+        {
+            //Insertion des Combinaisons Valables à mon vecteur
+            m_vecteur_test_dij.push_back(vecteur_enumeration_binaire[Num_Colonne]);
+            //Insertion des Poids Totaux Pour la Pondération 1 et 2 à mon vecteur dedié
+            m_PoidsTT.push_back(new PoidsTT{CoutTT1,CoutTT2,false});
+        }
     }
 }
 
@@ -674,7 +664,7 @@ void graphe::recupGraphe(std::vector<bool> arete)
     {
         sommets.push_back(new Sommet{m_sommets[a]->getId(), m_sommets[a]->getX(),m_sommets[a]->getY()});
     }
-    for(size_t a=0; a<m_aretes.size();a++)
+    for(size_t a=0; a<m_aretes.size(); a++)
     {
         if(arete[a]==true)
         {
@@ -697,7 +687,7 @@ int graphe::rechercher_afficherToutesCC() const
         if (cc.count((test)->getId())== 0)//check si marqué ou pas
         {
             i++; ///ajoute car cc
-           // std::cout<<"cc"<<i<<std::endl; //affiche numero cc
+            // std::cout<<"cc"<<i<<std::endl; //affiche numero cc
             (test)->rechercherCC(cc); //cherche tous les sommets de la cc
             //std::cout<<std::endl;
         }
