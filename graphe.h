@@ -27,8 +27,6 @@ public:
     void EnumerationBinairePareto();
     void dessiner_Combinaison_Pareto(Svgfile &fichier_pareto);
 
-    float Dijkstra(std::vector<bool>arete,int sommetdep);
-    void EnumerationBinaireDij();
 
     std::string changement_float (float val);
     int rechercher_afficherToutesCC() const;

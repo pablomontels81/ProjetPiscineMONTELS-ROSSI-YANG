@@ -32,7 +32,7 @@ int main()
     g0.Pareto();
     g0.dessiner_Combinaison_Pareto(out);
 
-    //std::cout << g0.Dijkstra(test,0);
+
 
     //int ncc=g4.rechercher_afficherToutesCC();
     //std::cout << "NBRE CC : " << ncc << std::endl;
