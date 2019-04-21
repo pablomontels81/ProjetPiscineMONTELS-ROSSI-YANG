@@ -7,23 +7,35 @@ int main()
 {
     Svgfile svgout;
     Svgfile out("Pareto.svg");
-    std::vector<std::string> m;
+
+    std::vector<bool>test;
+    test.push_back(0);
+    test.push_back(1);
+    test.push_back(1);
+    test.push_back(0);
+    test.push_back(1);
     //Déclaration des vecteurs de type Arete allant prendre le vecteur d'Arete trié
     graphe g0("broadway.txt","broadway_weights_0.txt");
     graphe g1("triville.txt","triville_weights_0.txt");
     graphe g2("cubetown.txt","cubetown_weights_0.txt");
     graphe g3("manhattan.txt","manhattan_weights_0.txt");
+    graphe g4("antoine.txt","antoine_weights_0.txt"); //test pour verifier si cc marche
 
 
-    g0.Algo_Djik(0,4);
-    //g0.Dijkstra();
+
     //g0.afficher();
     //g0.dessinerGraphe(svgout,"Graphe");
     //g0.dessinerCheminPrim(svgout); //0 pour poids 0
 
-    //g0.EnumerationBinaire();
-    //g0.Pareto();
-    //g0.dessiner_Combinaison_Pareto(out);
+
+    g0.EnumerationBinairePareto();
+    g0.Pareto();
+    g0.dessiner_Combinaison_Pareto(out);
+
+
+
+    //int ncc=g4.rechercher_afficherToutesCC();
+    //std::cout << "NBRE CC : " << ncc << std::endl;
 
     //system("PAUSE");
     //g1.dessiner_Combinaison_Pareto();

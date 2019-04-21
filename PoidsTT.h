@@ -19,6 +19,7 @@ class PoidsTT
         float Poids1;
         float Poids2;
         bool F_P;
+
 };
 
 #endif // POIDSTT_H_INCLUDED

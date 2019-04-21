@@ -10,7 +10,7 @@ Sommet::Sommet(std::string id,double x,double y):m_id{id},m_x{x},m_y{y}
 {
 }
 
-void Sommet::ajouterVoisin(std::string voisin)
+void Sommet::ajouterVoisin(const Sommet* voisin)
 {
     m_voisins.push_back(voisin);
 }
@@ -53,8 +53,19 @@ double Sommet::getX()
 
 double Sommet::getY()
 {
-     return m_y;
+   return m_y;
 }
+
+float Sommet::getPoids()
+{
+     return m_poid;
+}
+
+float Sommet::setPoids(float poid)
+{
+    m_poid = poid;
+}
+
 
 std::string Sommet::getId()
 {
@@ -89,4 +100,20 @@ void Sommet::setMarq(bool marq)
 Sommet::~Sommet()
 {
     //dtor
+}
+
+/// on fait du recursif ///
+std::unordered_set<std::string> Sommet::rechercherCC(std::unordered_set<std::string> &cc) const
+{
+    cc.insert(m_id); //on ajoute l'identifiant
+    //std::cout << "    " << m_id; //on l'affiche
+    for(const auto &test : m_voisins) //on parcourt les voisins
+    {
+        if(cc.count(test->m_id) == 0) //si pas marqué on relance le programme
+        {
+            test->rechercherCC(cc);
+        }
+    }
+
+    return cc;
 }
